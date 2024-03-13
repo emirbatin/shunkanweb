@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import "./CreateAccountPage.css";
 import SectionChooseLanguage from "../../components/Sections/Choose Language/ChooseLanguage";
 import SectionIntroduceYourself from "../../components/Sections/Introduce Yourself/IntroduceYourself";
+import CameraAccess from "../../components/Sections/Camera Access/CameraAccess";
 
 const CreateAccountPage = () => {
   const [currentSection, setCurrentSection] = useState(0); // İlk section 0 indeksli olduğu için 0'dan başlatıyoruz.
@@ -37,7 +38,7 @@ const CreateAccountPage = () => {
       case 2:
         return <SectionIntroduceYourself goToNextSection={goToNextSection} />;
       case 3:
-        return <SectionIntroduceYourself goToNextSection={goToNextSection} />;
+        return <CameraAccess goToNextSection={goToNextSection} />;
       case 4:
         return <SectionIntroduceYourself goToNextSection={goToNextSection} />;
       default:
