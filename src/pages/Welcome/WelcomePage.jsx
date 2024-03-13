@@ -50,6 +50,11 @@ const WelcomePage = () => {
           >
             {t("letsStart")}
           </button>
+          <div className="buttonContainer">
+            <p className="loginText" onClick={() => navigate("login")}>
+              You're not new? then log in!
+            </p>
+          </div>
         </div>
         <div className="left">
           <div id="lottie" className="lottie"></div>
