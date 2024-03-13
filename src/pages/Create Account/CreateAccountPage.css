@@ -1,0 +1,25 @@
+.progressBarContainer {
+  display: flex;
+  width: 50%;
+  justify-content: start;
+  align-items: start;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin: 0 auto;
+}
+
+.progressBarBackground {
+  position: relative; /* Çocuklar için pozisyon referans noktası */
+  width: 100%; /* veya belirli bir genişlik */
+  height: 20px;
+  background-color: #ffeae7; /* Arka plan barı için gri renk */
+  border-radius: 10px; /* Yuvarlatılmış köşeler */
+}
+
+.progressBar {
+  position: absolute;
+  background-color: var(--button-color);
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+  border-radius: 20px;
+}

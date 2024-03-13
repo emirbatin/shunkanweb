@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'Natsuzemi Maru';
+  font-style: normal;
+  src: local('Natsuzemi Maru'), url('/src/fonts/NatsuzemiMaruGothicBlack.ttf') format('truetype');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Natsuzemi Maru', sans-serif;
+}
+
+:root {
+  max-width: 100%;
+  
+  /* Light tema varsayılan değerler */
+  --text-color: #FF6666;
+  --button-color: #FF9789;
+  --title-text-color: #FF9789;
+  --icon-color : #FF9789;
+  --text-secondary-color: #A8AAA9;
+  --text-third-color: #75767A;
+  --text-black-color: #000;
+  --login-container-bg: #ccc;
+  --background-color: #FFF8F8;
+  --input-bg-color: #f5f5f5;
+  --selector-bg-color: #f5f5f5;
+  --containter-bg-color: #fff;
+  --input-area-bg-color: #f5f5f5;
+  --button-text-color: #fff;
+  --appbar-color: #FFF8F8;
+
+  /* Dark tema için değerler */
+  --dark-text-color: #FDFEFD;
+  --dark-background-color: #27282C;
+  --dark-login-container-bg: #444444;
+  --dark-button-color: #FF5A95;
+  --dark-input-bg-color: #333;
+  --dark-selector-bg-color: #333;
+  --dark-title-text-color: #FF5A95;
+  --dark-container-bg-color: #3D2232;
+  --dark-input-area-bg-color: #444444;
+  --dark-button-text-color: FDFEFD;
+  --dark-icon-color : #FF5A95;
+  --dark-appbar-color: #27282C;
+}
+
+[data-theme="dark"] {
+  --text-color: var(--dark-text-color);
+  --background-color: var(--dark-background-color);
+  --login-container-bg: var(--dark-login-container-bg);
+  --button-color: var(--dark-button-color);
+  --input-bg-color: var(--dark-input-bg-color);
+  --selector-bg-color: var(--dark-selector-bg-color);
+  --title-text-color: var(--dark-title-text-color);
+  --containter-bg-color: var(--dark-container-bg-color);
+  --input-area-bg-color: var(--dark-input-area-bg-color);
+  --icon-color: var(--dark-icon-color);
+  --appbar-color: var(--dark-appbar-color);
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+#root {
+  width: 100%; 
+  margin: 0; 
+  padding: 0; 
+  min-height: 100vh;
+  text-align: center;
+}

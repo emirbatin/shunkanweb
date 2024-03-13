@@ -1,0 +1,58 @@
+body {
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  color: white;
+}
+
+.left {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-right: 10em;
+  padding-bottom: 10em;
+}
+
+.right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  text-align: left;
+  padding-left: 20em;
+  padding-bottom: 10em;
+}
+
+.pageTitle {
+  font-size: 3em;
+  margin-bottom: 0.5em;
+  color: var(--title-text-color);
+}
+
+.pageDesc {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+  color: var(--text-secondary-color);
+}
+
+.next-page-button {
+  background-color: var(--button-color);
+  color: var(--button-text-color);
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 0.5em;
+  width: 140px;
+  font-size: 1.2em;
+}
+
+.lottie {
+  width: 100%;
+  height: auto;
+}

@@ -1,0 +1,71 @@
+body {
+  overflow: hidden;
+}
+
+.sectionChooseLanguage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: auto;
+  height: 100vh;
+}
+
+.chooseLangContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: auto;
+  height: auto;
+  padding-bottom: 10em;
+}
+.langContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: auto;
+  height: auto;
+  margin: 7em;
+}
+
+.flag {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  margin: 5em;
+  border-radius: 10px;
+}
+
+.langCard {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  margin: 10px;
+}
+
+/* Seçilen kartı vurgular */
+.langCard.selected {
+  transform: scale(1.05); /* Kartı biraz büyüt */
+  background-color: var(
+    --button-color
+  ); /* Arka plan rengini hafifçe değiştirir */
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-radius: 10px;
+  color: var(--button-text-color);
+}
+
+.chooseLangTitle {
+  color: var(--title-text-color);
+}
+
+.nextSectionButton {
+  background-color: var(--button-color) !important;
+  color: var(--button-text-color) !important;
+  width: auto;
+  height: auto;
+}
