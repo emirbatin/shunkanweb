@@ -1,0 +1,25 @@
+@import url("../../App.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Natsuzemi Maru", sans-serif !important;
+}
+
+.transparentAvatar {
+  background-color: transparent !important;
+}
+
+.icon {
+  color: var(--title-text-color);
+}
+
+
+.MuiMenu-paper {
+  background-color: var(--selector-bg-color) !important;
+}
+
+.languageName{
+  color: var(--text-color) !important;
+}

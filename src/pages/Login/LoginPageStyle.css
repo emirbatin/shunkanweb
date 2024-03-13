@@ -1,0 +1,152 @@
+.loginPageContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  color: white;
+}
+
+.loginPageLeftContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  text-align: left;
+  margin-left: 10em;
+  padding-bottom: 10em;
+  margin-right: 5em;
+}
+
+.loginPageRightContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-right: 20em;
+  padding-bottom: 10em;
+  margin-left: 5em;
+}
+
+.icons {
+  color: var(--text-color);
+}
+
+.loginPageTitle {
+  color: var(--title-text-color);
+  font-size: 3em;
+  margin-bottom: 1em;
+}
+
+.loginPageForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  text-align: left;
+  width: 100%;
+}
+
+.loginPageUsernameInputContainer,
+.loginPagePasswordInputContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.loginPagePasswordText,
+.loginPageUsernameText {
+  color: var(--title-text-color);
+  margin-bottom: 0.5em;
+}
+
+.loginPageUsernameInput,
+.loginPagePasswordInput {
+  padding: 1em;
+  width: 70%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: var(--input-area-bg-color);
+  color: var(--text-color);
+}
+
+.loginButton {
+  margin-top: 1em;
+  padding: 0.7em;
+  width: 30%;
+  border-radius: 5px;
+  background-color: var(--button-color);
+  color: var(--button-text-color) !important;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.loginPageLineContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 10px;
+  align-items: center;
+  text-align: center;
+  width: 80%;
+}
+
+.loginPageLine {
+  width: 45%;
+  height: 5px;
+  background-color: var(--button-color);
+  border: none;
+  border-radius: 5px;
+}
+
+.loginPageOR {
+  color: var(--button-color);
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.orLoginContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* İki sütun oluştur */
+  grid-template-rows: 1fr 1fr; /* İki satır oluştur */
+  gap: 10px; /* Hücreler arası boşluk */
+}
+
+.loginPageAppleLoginButton {
+  padding: 1em !important;
+  width: 100% !important;
+  border-radius: 5px !important;
+  background-color: black !important;
+  color: white !important;
+  font-weight: bold;
+  cursor: pointer;
+}
+.loginPageFacebookLoginButton {
+  padding: 1em !important;
+  width: 100% !important;
+  border-radius: 5px !important;
+  background-color: rgb(0, 102, 255) !important;
+  color: white !important;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.loginPageGoogleLoginButton {
+  padding: 1em !important;
+  width: 100% !important;
+  border-radius: 5px;
+  background-color: rgb(255, 65, 65) !important;
+  color: white !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+}
+
+.loginPageLottie {
+  display: flex;
+  width: 150%;
+  height: auto;
+}
