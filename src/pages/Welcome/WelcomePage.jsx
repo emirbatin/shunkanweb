@@ -10,11 +10,13 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
+import Button from "@mui/material/Button";
+
 
 const WelcomePage = () => {
   useEffect(() => {
     const animation = lottie.loadAnimation({
-      container: document.getElementById("lottie"),
+      container: document.getElementById("welcomeLottie"),
       renderer: "svg",
       loop: true,
       autoplay: true,
@@ -26,38 +28,44 @@ const WelcomePage = () => {
       },
     });
 
-    // Dönüş fonksiyonu olarak temizleyici fonksiyonu döndürün
     return () => {
-      animation.destroy(); // Animasyonu temizle
+      animation.destroy(); // Clean up the animation
     };
   }, []);
 
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  // Rotalama işlevini tetiklemek için kullanılacak yöntem
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
+
   return (
     <div>
-      <div className="container">
-        <div className="right">
-          <h1 className="pageTitle">{t("appTitle")}</h1>
-          <h2 className="pageDesc">
+      <div className="welcomeContainer">
+        <div className="welcomeRightContainer">
+          <h1 className="welcomePageTitle">{t("appTitle")}</h1>
+          <h2 className="welcomePageDesc">
             Lorem Ipsum is simply dummy text of the printing and typesetting
             industry.
           </h2>
-          <button
-            className="next-page-button"
-            onClick={() => navigate("/createAccount")}
+          <Button
+            className="nextButton"
+            variant="contained"
+            type="button"
+            onClick={() => handleNavigate('/createAccount')} // Butona tıklandığında yönlendirme yap
           >
-            {t("letsStart")}
-          </button>
+            Let's Start
+          </Button>
           <div className="buttonContainer">
-            <p className="loginText" onClick={() => navigate("login")}>
+            <p className="welcomeLoginText" onClick={() => navigate("login")}>
               You're not new? then log in!
             </p>
           </div>
         </div>
-        <div className="left">
-          <div id="lottie" className="lottie"></div>
+        <div className="welcomeLeftContainer">
+          <div id="welcomeLottie" className="welcomeLottie"></div>
         </div>
       </div>
     </div>

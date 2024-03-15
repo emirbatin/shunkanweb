@@ -4,9 +4,11 @@ import { useTranslation } from "react-i18next";
 import japaneseFlag from "../../../assets/images/Flag_of_Japan.png";
 import americanFlag from "../../../assets/images/Flag_of_the_United_States.png";
 import turkishFlag from "../../../assets/images/Flag-Turkey.webp";
+import Button from "@mui/material/Button";
 
 const Section1 = ({ goToNextSection }) => {
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const { t } = useTranslation();
 
   const handleLanguageSelect = (languageCode) => {
     setSelectedLanguage(languageCode);
@@ -56,15 +58,14 @@ const Section1 = ({ goToNextSection }) => {
             <h2 className="tr">Turkish</h2>
           </div>
         </div>
-        <button
+        <Button
           className="nextSectionButton"
-          onClick={() => {
-            console.log("Selected Language:", selectedLanguage); // Seçilen dili konsola yazdır
-            goToNextSection();
-          }}
+          variant="contained"
+          type="button"
+          onClick={goToNextSection}
         >
-          Next Section
-        </button>
+          {t("continue")}
+        </Button>
       </div>
     </div>
   );

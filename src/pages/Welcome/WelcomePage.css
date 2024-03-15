@@ -2,14 +2,14 @@ body {
   overflow: hidden;
 }
 
-.container {
+.welcomeContainer {
   display: flex;
   flex-direction: row;
   height: 100vh;
   color: white;
 }
 
-.left {
+.welcomeLeftContainer {
   flex: 2;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@ body {
   padding-bottom: 10em;
 }
 
-.right {
+.welcomeRightContainer {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -30,29 +30,33 @@ body {
   padding-bottom: 10em;
 }
 
-.pageTitle {
+.welcomePageTitle {
   font-size: 3em;
   margin-bottom: 0.5em;
   color: var(--title-text-color);
 }
 
-.pageDesc {
+.welcomePageDesc {
   font-size: 1.5em;
   margin-bottom: 1em;
   color: var(--text-secondary-color);
 }
 
-.next-page-button {
-  background-color: var(--button-color);
-  color: var(--button-text-color);
-  padding: 0.5em 1em;
-  border: none;
-  border-radius: 0.5em;
+.nextButton {
+  height: 50px;
   width: 140px;
-  font-size: 1.2em;
-}
+  border-radius: 10px;
+  background-color: var(--button-color) !important;
+  color: var(--button-text-color) !important;
+  cursor: pointer;
+  }
 
-.lottie {
+.welcomeLottie {
   width: 100%;
   height: auto;
+}
+
+.welcomeLoginText{
+  cursor: pointer;
+  margin-top: 1em;
 }

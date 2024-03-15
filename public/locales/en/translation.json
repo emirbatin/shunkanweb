@@ -25,10 +25,11 @@
    "appTitle" : "Shunkan",
    "dark": "Dark",
    "light": "Light",
-   "signinwithapple" : "Sign in with Apple",
-   "signinwithgoogle" : "Sign in with Google",
-   "signinwithfacebook" : "Sign in with Facebook",
-   "signinwithtwitter" : "Sign in with Twitter",
+   "signinwithapple" : "Apple",
+   "signinwithgoogle" : "Google",
+   "signinwithfacebook" : "Facebook",
+   "signinwithtwitter" : "Twitter",
    "letsStart" : "Let's Start",
-   "pickupwhereyouleftoffandlogin!" : "Pick up where you left off and log in!"
+   "pickupwhereyouleftoffandlogin!" : "Pick up where you left off and log in!",
+   "email" : "Email"
 }

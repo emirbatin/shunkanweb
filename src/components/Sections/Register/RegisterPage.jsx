@@ -25,71 +25,93 @@ const Sections3 = ({ goToNextSection }) => {
   };
 
   return (
-    <div className="sectionRegisterPage">
-      <div className="registerPageContainer">
-        <h1 className="registerPageTitle">
+    <div className="register-section">
+      <div className="register-container">
+        <h1 className="register-title">
           {t(
             "Nice to meet you! {userName}, We just need a few more steps to create your account."
           )}
         </h1>
-        <div className="registerPageDivContainer">
-          <form className="registerPageForm" onSubmit={handleSubmit}>
-            <div class="registerPageLeftContainer">
-              <div className="registerPageUsernameInputContainer">
-                <p className="registerPageUsernameText">{t("username")}</p>
+        <div className="form-container">
+          <div class="form-left">
+            <form className="register-form" onSubmit={handleSubmit}>
+              <div className="input-container">
+                <p className="input-label">{t("username")}</p>
                 <input
-                  className="registerPageUsernameInput"
+                  className="input-field"
                   type="text"
                   placeholder={t("username")}
                   value={username}
                   onChange={handleUsernameChange}
                 />
               </div>
-              <div className="registerPageUsernameInputContainer">
-                <p className="registerPageUsernameText">{t("Email")}</p>
+              <div className="input-container">
+                <p className="input-label">{t("email")}</p>
                 <input
-                  className="registerPageUsernameInput"
+                  className="input-field"
                   type="email"
-                  placeholder={t("Email")}
+                  placeholder={t("email")}
                   value={username}
                   onChange={handleUsernameChange}
                 />
               </div>
 
-              <div className="registerPagePasswordInputContainer">
-                <p className="registerPagePasswordText">{t("password")}</p>
+              <div className="input-container">
+                <p className="input-label">{t("password")}</p>
                 <input
-                  className="registerPagePasswordInput"
+                  className="input-field"
                   type="password"
                   placeholder={t("password")}
                   value={password}
                   onChange={handlePasswordChange}
                 />
-              </div>
-              {/*Checkbox */}
-              <input className="userAgreement" type="checkbox"></input>
-              <label htmlFor="userAgreement" className="userAgreementLabel">
-                {t("I agree to the terms and conditions")}
-              </label>
-              <br />
-              <a className="TermsAndConditions">TermsAndConditions</a>
 
-              {/*Button  */}
-              <button className="registerButton" type="submit">
-                {t("register")}
-              </button>
+                {/*Button  */}
+                <Button
+                  className="next-section-button"
+                  variant="contained"
+                  type="button"
+                  onClick={goToNextSection}
+                >
+                  {t("continue")}
+                </Button>
+              </div>
+
+              <div className="agreement-container">
+                {/*Checkbox */}
+                <div className="agreement-checkbox-container">
+                  <input
+                    id="agreement"
+                    className="agreement-checkbox"
+                    type="checkbox"
+                  ></input>
+                  <div className="agreement-label-container">
+                    <label htmlFor="agreement" className="agreement-label">
+                      {t("I agree to the terms and conditions")}
+                    </label>
+                    <div className="terms-privacy-container">
+                      <a className="terms-label">Terms & Conditions</a>
+                      <a className="privacy-label">Privacy Policy</a>
+                    </div>
+                  </div>
+                </div>
+
+                <br />
+              </div>
+            </form>
+          </div>
+          <div className="form-middle">
+            <div className="form-or-container">
+              <hr className="form-line" />
+              <p className="form-or-text">{t("or")}</p>
+              <hr className="form-line" />
             </div>
-          </form>
-          <div className="registerPageORContainer">
-            <hr className="registerPageLine" />
-            <p className="registerPageOR">{t("or")}</p>
-            <hr className="registerPageLine" />
           </div>
 
-          <div class="registerPageRightContainer">
-            <div className="orregisterContainer">
+          <div class="form-right">
+            <div className="social-register-container">
               <Button
-                className="registerPageAppleRegisterButton"
+                className="apple-register-button"
                 variant="contained"
                 startIcon={<AppleIcon />}
                 type="button"
@@ -98,7 +120,7 @@ const Sections3 = ({ goToNextSection }) => {
               </Button>
 
               <Button
-                className="registerPageFacebookRegisterButton"
+                className="facebook-register-button"
                 variant="contained"
                 startIcon={<FacebookIcon />}
                 type="button"
@@ -107,7 +129,7 @@ const Sections3 = ({ goToNextSection }) => {
               </Button>
 
               <Button
-                className="registerPageGoogleRegisterButton"
+                className="google-register-button"
                 variant="contained"
                 startIcon={<Google />}
                 type="button"
