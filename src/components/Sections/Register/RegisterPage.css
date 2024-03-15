@@ -1,0 +1,151 @@
+.registerPageContainer {
+  display: grid;
+}
+
+
+  
+  .icons {
+    color: var(--text-color);
+  }
+  
+  .registerPageTitle {
+    color: var(--title-text-color);
+    font-size: 1em;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row; /* Sütun şeklinde hizalama */
+    justify-content: flex-start; /* Yazıyı en üstte hizalar */
+  }
+  
+  .registerPageDivContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-content: space-evenly;
+  }
+  
+  .registerPageFormContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: start;
+  }
+  .registerPageUsernameInputContainer,
+  .registerPagePasswordInputContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 1em;
+  }
+  
+  .registerPagePasswordText,
+  .registerPageUsernameText {
+    color: var(--title-text-color);
+    margin-bottom: 0.5em;
+  }
+  
+  .registerPageUsernameInput,
+  .registerPagePasswordInput {
+    padding: 1em;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--input-area-bg-color);
+    color: var(--text-color);
+  }
+  
+  .registerButton {
+    margin-top: 1em;
+    padding: 0.7em;
+    width: 70%;
+    border-radius: 5px;
+    background-color: var(--button-color);
+    color: var(--button-text-color) !important;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .registerPageLineContainer {
+    display: inside;
+    flex-direction: row; /* Yatay hizalama */
+    justify-content: normal;
+    padding-top: 10px;
+    align-items: normal;
+    text-align: normal;
+    height: 80%;
+  }
+  
+  .registerPageLineContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 80%;
+  }
+  
+  .registerPageLine {
+    width: 5px;
+    height: 6em;
+    background-color: var(--button-color);
+    border: none;
+    border-radius: 5px;
+    margin: 2em ;
+  }
+  .registerPageORContainer {
+    grid-column: span 3; /* The 'or' container spans all three columns */
+  }
+  
+  .registerPageOR {
+    color: var(--button-color);
+    font-size: 1.5em;
+  }
+  
+  .orregisterContainer {
+    margin-top: 5em;
+    display: grid;
+    grid-template-rows: 1fr 1fr; /* İki satır oluştur */
+    gap: 10px; /* Hücreler arası boşluk */
+  }
+  
+  .registerPageAppleRegisterButton {
+    padding: 1em !important;
+    width: 100% !important;
+    border-radius: 5px !important;
+    background-color: black !important;
+    color: white !important;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .registerPageFacebookRegisterButton {
+    padding: 1em !important;
+    width: 100% !important;
+    border-radius: 5px !important;
+    background-color: rgb(0, 102, 255) !important;
+    color: white !important;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .registerPageGoogleRegisterButton {
+    padding: 1em !important;
+    width: 100% !important;
+    border-radius: 5px;
+    background-color: rgb(255, 65, 65) !important;
+    color: white !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+  }
+
+  .userAgreement{
+    background-color: white;
+  }
+  .registerPageLottie {
+    display: flex;
+    width: 150%;
+    height: auto;
+  }
+  
