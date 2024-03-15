@@ -59,6 +59,9 @@ const LoginPage = () => {
               <input
                 className="loginPageUsernameInput"
                 type="text"
+                id="loginUsernameInput"
+                name="loginUsernameInput"
+                autoComplete="username"
                 placeholder={t("username")}
                 value={username}
                 onChange={handleUsernameChange}
@@ -69,16 +72,25 @@ const LoginPage = () => {
               <p className="loginPagePasswordText">{t("password")}</p>
               <input
                 className="loginPagePasswordInput"
+                id="loginPasswordInput"
+                name="loginPasswordInput"
+                autoComplete="password"
                 type="password"
                 placeholder={t("password")}
                 value={password}
                 onChange={handlePasswordChange}
+                
               />
             </div>
 
-            <button className="loginButton" type="submit">
+            <Button
+              className="loginButton"
+              variant="contained"
+              type="button"
+              onClick={console.log("Login")}
+            >
               {t("login")}
-            </button>
+            </Button>
 
             <div className="loginPageLineContainer">
               <hr className="loginPageLine" />
@@ -86,9 +98,9 @@ const LoginPage = () => {
               <hr className="loginPageLine" />
             </div>
 
-            <div className="orLoginContainer">
+            <div className="social-login-container">
               <Button
-                className="loginPageAppleLoginButton"
+                className="apple-login-button"
                 variant="contained"
                 startIcon={<AppleIcon />}
                 type="button"
@@ -97,7 +109,7 @@ const LoginPage = () => {
               </Button>
 
               <Button
-                className="loginPageFacebookLoginButton"
+                className="facebook-login-button"
                 variant="contained"
                 startIcon={<FacebookIcon />}
                 type="button"
@@ -106,7 +118,7 @@ const LoginPage = () => {
               </Button>
 
               <Button
-                className="loginPageGoogleLoginButton"
+                className="google-login-button"
                 variant="contained"
                 startIcon={<Google />}
                 type="button"

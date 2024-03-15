@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import "./CameraAccess.css";
+import Button from "@mui/material/Button";
 
 const Section4 = ({ goToNextSection }) => {
   const { t } = useTranslation();
@@ -87,9 +88,13 @@ const Section4 = ({ goToNextSection }) => {
           system's accuracy and enhance your learning experience by providing
           more personalized and effective interactions.
         </p>
-        <button className="nextSectionButton" onClick={handleNextSectionClick}>
-          {t("Save and Continue")}
-        </button>
+        <Button
+        className="nextSectionButton"
+        variant="contained"
+        type="button"
+        onClick={handleNextSectionClick}>
+          {t("continue")}
+        </Button>
       </div>
     </div>
   );

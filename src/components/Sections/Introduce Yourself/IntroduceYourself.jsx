@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./IntroduceYourself.css";
+import Button from "@mui/material/Button";
 
 const Section2 = ({ goToNextSection }) => {
   const [name, setName] = useState("");
@@ -21,7 +22,14 @@ const Section2 = ({ goToNextSection }) => {
           value={name}
           onChange={handleUsernameChange}
         />
-        <button className="nextSectionButton" onClick={goToNextSection}>{t("Next Section")}</button>
+        <Button
+          className="nextSectionButton"
+          variant="contained"
+          type="button"
+          onClick={goToNextSection}
+        >
+          {t("continue")}
+        </Button>
       </div>
     </div>
   );

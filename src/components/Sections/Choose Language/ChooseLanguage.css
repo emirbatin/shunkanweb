@@ -64,8 +64,11 @@ body {
 }
 
 .nextSectionButton {
+  margin-top: 2em !important;
+  height: 50px;
+  width: 140px;
+  border-radius: 10px;
   background-color: var(--button-color) !important;
   color: var(--button-text-color) !important;
-  width: auto;
-  height: auto;
-}
+  cursor: pointer;
+  }
