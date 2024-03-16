@@ -59,4 +59,5 @@ body {
 .welcomeLoginText{
   cursor: pointer;
   margin-top: 1em;
+  color: var(--text-color)
 }
