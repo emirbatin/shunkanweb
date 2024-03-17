@@ -54,7 +54,7 @@ const WelcomePage = () => {
             className="nextButton"
             variant="contained"
             type="button"
-            onClick={() => handleNavigate('/createAccount')} // Butona tıklandığında yönlendirme yap
+            onClick={() => handleNavigate('/courses')} // Butona tıklandığında yönlendirme yap
           >
             Let's Start
           </Button>
