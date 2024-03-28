@@ -31,5 +31,21 @@
    "signinwithtwitter" : "Twitter",
    "letsStart" : "Let's Start",
    "pickupwhereyouleftoffandlogin!" : "Pick up where you left off and log in!",
-   "email" : "Email"
+   "email" : "Email",
+   "selectcourses" : "Select Courses",
+   "student" : "Student",
+   "home" : "Home",
+   "courses" : "Courses",
+   "profile" : "Profile",
+   "settings" : "Settings",
+   "about" : "About",
+   "contact" : "Contact",
+   "terms" : "Terms",
+   "privacy" : "Privacy",
+   "faq" : "FAQ",
+   "help" : "Help",
+   "feedback" : "Feedback",
+   "search" : "Search",
+   "startLesson": "Start Lesson",
+   "hours" : "Hours"
 }

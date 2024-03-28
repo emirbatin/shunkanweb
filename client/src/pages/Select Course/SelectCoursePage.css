@@ -92,7 +92,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-
+    margin-bottom: 1em;
 }
 
 .courses-title-icon {
@@ -103,6 +103,8 @@
 
 .courses-title {
     font-size: 36px;
+    color: var(--text-color) !important;
+    
 }
 
 .courses-lessons-cards {
@@ -122,18 +124,25 @@
     text-align: start;
     background-color: #fff;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+    color: var(--title-text-color) !important;
+}
+
+.lesson-card-desc{
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
 }
 
 .lesson-image{
     width: 100%;
     height: 150px;
     margin-bottom: 10px;
-    
+    border-radius: 10px 10px 0 0;
+    object-fit: cover;
 }
 
 .lesson-hours{
     font-size: 14px;
-    color: var(--text-color);
     display: flex;
     flex-direction: row;
 }
@@ -152,7 +161,7 @@
 .lesson-button{
     height: 20px;
     border-radius: 10px;
-    color: var(--text-color) !important;
+    color: var(--title-text-color) !important;
     cursor: pointer;
     font-size: 20px;
 }

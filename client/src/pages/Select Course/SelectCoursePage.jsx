@@ -18,6 +18,7 @@ import "./SelectCoursePage.css";
 const SelectCoursePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  var userPerm = "Student";
 
   const [lessons, setLessons] = useState([
     {
@@ -72,8 +73,10 @@ const SelectCoursePage = () => {
                 alt="user"
               />
               <div className="user-info">
-                <h3 className="username">Username</h3>
-                <h4 className="user-perm">Student</h4>
+                <h3 className="username">{t("username")}</h3>
+                <h4 className="user-perm"> 
+                  {userPerm === "Student" ? t("student") : t("teacher")} 
+                 </h4>
               </div>
             </div>
           </div>
@@ -84,25 +87,25 @@ const SelectCoursePage = () => {
             <ul>
               <li>
                 <Link className="route-link" to="/home">
-                  Home
+                  {t("home")}
                 </Link>
               </li>
               <br />
               <li>
                 <Link className="route-link" to="/courses">
-                  Courses
+                  {t("courses")}
                 </Link>
               </li>
               <br />
               <li>
                 <Link className="route-link" to="/profile">
-                  Profile
+                  {t("profile")}
                 </Link>
               </li>
               <br />
               <li>
                 <Link className="route-link" to="/settings">
-                  Settings
+                  {t("settings")}
                 </Link>
               </li>
             </ul>
@@ -136,24 +139,26 @@ const SelectCoursePage = () => {
                     alt="lesson"
                   />
                 </div>
-                <h3 className="lesson-title">{lesson.title}</h3>
-                <p className="lesson-desc">{lesson.description}</p>
-                <div className="lesson-hours">
-                  <SvgIcon className="lesson-hours-label-icon">
-                    <VideocamIcon />
-                  </SvgIcon>
-                  <p className="lesson-hours-text">Hours: {lesson.hours}</p>
-                </div>
-                <br />
-                <div className="lesson-card-button-container">
-                  <Button
-                    className="lesson-button"
-                    variant="text"
-                    type="button"
-                    onClick={() => handleNavigate(lesson.navigateTo)}
-                  >
-                    {t("startlesson")}
-                  </Button>
+                <div className="lesson-card-desc">
+                  <h3 className="lesson-title">{lesson.title}</h3>
+                  <p className="lesson-desc">{lesson.description}</p>
+                  <div className="lesson-hours">
+                    <SvgIcon className="lesson-hours-label-icon">
+                      <VideocamIcon />
+                    </SvgIcon>
+                    <p className="lesson-hours-text">{t("hours")}: {lesson.hours}</p>
+                  </div>
+                  <br />
+                  <div className="lesson-card-button-container">
+                    <Button
+                      className="lesson-button"
+                      variant="text"
+                      type="button"
+                      onClick={() => handleNavigate(lesson.navigateTo)}
+                    >
+                      {t("startLesson")}
+                    </Button>
+                  </div>
                 </div>
                 <br />
               </div>
