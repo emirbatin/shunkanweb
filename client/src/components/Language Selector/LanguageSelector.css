@@ -17,7 +17,3 @@
 .MuiMenu-paper {
   background-color: var(--selector-bg-color) !important;
 }
-
-.languageName{
-  color: var(--text-color) !important;
-}

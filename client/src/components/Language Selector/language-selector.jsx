@@ -8,6 +8,7 @@ import {
   Avatar,
 } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
+import Typography from "@mui/material/Typography";
 import "./LanguageSelector.css";
 
 const languages = [
@@ -42,7 +43,7 @@ const LanguageSelector = () => {
         onClick={handleClick}
         size="large"
       >
-        <LanguageIcon className="icon" />
+        <LanguageIcon />
       </IconButton>
       <Menu
         id="language-menu"
@@ -55,7 +56,7 @@ const LanguageSelector = () => {
             <ListItemIcon className="listItemIcon">
               <Avatar className="transparentAvatar">{lng.icon}</Avatar>
             </ListItemIcon>
-            <div className="languageName">{lng.name}</div>
+            <Typography className="languageName">{lng.name}</Typography>
           </MenuItem>
         ))}
       </Menu>

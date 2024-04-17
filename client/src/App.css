@@ -1,8 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: 'Natsuzemi Maru';
   font-style: normal;
   src: local('Natsuzemi Maru'), url('/src/fonts/NatsuzemiMaruGothicBlack.ttf') format('truetype');
 }
+
 
 * {
   margin: 0;
@@ -13,41 +18,104 @@
 
 :root {
   max-width: 100%;
-  
-  /* Light tema varsayılan değerler */
+
+  /* Light tema için değerler */
+
+  /*Appbar Renkleri*/
+  --appbar-color: #FFF8F8;
+
+  /*Title Renkleri*/
+  --h1-text-color: #FF9789;
+  --h2-text-color: #FF9789;
+  --h3-text-color: #FF9789;
+  --h4-text-color: #FF9789;
+  --h5-text-color: #FF9789;
+  --h6-text-color: #FF9789;
+
+  /*Text Renkleri*/
   --text-color: #FF6666;
-  --button-color: #FF9789;
-  --title-text-color: #FF9789;
-  --icon-color : #FF9789;
   --text-secondary-color: #A8AAA9;
   --text-third-color: #75767A;
   --text-black-color: #000;
-  --login-container-bg: #ccc;
+
+  /*Button Renkleri*/
+  --button-color: #FF9789;
+  --button-text-color: #fff;
+
+  /*Icon Renkleri*/
+  --icon-button-color: #FF9789;
+  --icon-color: #ffff;
+
+
+  /*Background Renkleri*/
   --background-color: #FFF8F8;
   --input-bg-color: #f5f5f5;
+  --login-container-bg: #ccc;
   --selector-bg-color: #f5f5f5;
   --containter-bg-color: #fff;
   --input-area-bg-color: #f5f5f5;
-  --button-text-color: #fff;
-  --appbar-color: #FFF8F8;
+
+  /*Card Renkleri*/
+
+  --card-background-color: #FFFFFF;
+
 
   /* Dark tema için değerler */
+
+  /*Appbar Renkleri*/
+  --dark-appbar-color: #27282C;
+
+  /*Title Renkleri*/
+  --dark-h1-text-color: #FF5A95;
+  --dark-h2-text-color: #FF5A95;
+  --dark-h3-text-color: #FF5A95;
+  --dark-h4-text-color: #FF5A95;
+  --dark-h5-text-color: #FF5A95;
+  --dark-h6-text-color: #FF5A95;
+
+  /*Text Renkleri*/
   --dark-text-color: #FDFEFD;
+  --dark-text-secondary-color: #b6b6b6;
+  --dark-text-third-color: #e6e6e6;
+  --dark-text-black-color: #000;
+
+  /*Button Renkleri*/
+  --dark-button-color: #FF5A95;
+  --dark-button-text-color: #FDFEFD;
+
+  /*Icon Renkleri*/
+  --dark-icon-button-color: #FF5A95;
+  --dark-icon-color: #ffff;
+
+  /*Background Renkleri*/
   --dark-background-color: #27282C;
   --dark-login-container-bg: #444444;
-  --dark-button-color: #FF5A95;
   --dark-input-bg-color: #333;
   --dark-selector-bg-color: #333;
-  --dark-title-text-color: #FF5A95;
   --dark-container-bg-color: #3D2232;
   --dark-input-area-bg-color: #444444;
-  --dark-button-text-color: FDFEFD;
-  --dark-icon-color : #FF5A95;
-  --dark-appbar-color: #27282C;
+
+
+
+}
+
+.card{
+  background-color: var(--card-background-color);
 }
 
 [data-theme="dark"] {
+
+  --h1-text-color: var(--dark-h1-text-color);
+  --h2-text-color: var(--dark-h2-text-color);
+  --h3-text-color: var(--dark-h3-text-color);
+  --h4-text-color: var(--dark-h4-text-color);
+  --h5-text-color: var(--dark-h5-text-color);
+  --h6-text-color: var(--dark-h6-text-color);
+  --button-text-color: var(--dark-button-text-color);
   --text-color: var(--dark-text-color);
+  --text-secondary-color: var(--dark-text-secondary-color);
+  --text-third-color: var(--dark-text-third-color);
+  --text-black-color: var(--dark-text-black-color);
   --background-color: var(--dark-background-color);
   --login-container-bg: var(--dark-login-container-bg);
   --button-color: var(--dark-button-color);
@@ -56,8 +124,46 @@
   --title-text-color: var(--dark-title-text-color);
   --containter-bg-color: var(--dark-container-bg-color);
   --input-area-bg-color: var(--dark-input-area-bg-color);
+  --icon-button-color: var(--dark-icon-button-color);
   --icon-color: var(--dark-icon-color);
   --appbar-color: var(--dark-appbar-color);
+}
+
+.MuiAppBar-root {
+  background-color: transparent !important;
+  /* AppBar arka plan rengini şeffaf yap */
+  color: var(--title-text-color);
+  /* AppBar yazı rengi */
+  box-shadow: none !important;
+  /* AppBar gölgesini kaldır */
+  flex-grow: 1;
+}
+
+p {
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.route-link{
+  text-decoration: none;
+  color: var(--button-color) !important;
+  font-size: 20px;
+}
+
+.MuiButton-containedPrimary {
+  background-color: var(--button-color) !important;
+  color: var(--button-text-color) !important;
+  height: auto !important;
+  border: none !important;
+  padding: 0.5rem 2rem !important;
+  cursor: pointer !important;
+  font-size: 1rem !important;
+  border-radius: 0.25rem !important;
+}
+
+.MuiButton-textPrimary {
+  background-color: transparent !important;
+  color: var(--button-text-color) !important;
 }
 
 body {
@@ -65,10 +171,79 @@ body {
   background-color: var(--background-color);
 }
 
+.Appbar .MuiTypography-h5 {
+  color: var(--h5-text-color);
+  flex-grow: 1;
+}
+
+.MuiSvgIcon-root{
+  color: var(--icon-button-color);
+}
+
+.MuiTypography-h1 {
+  color: var(--h1-text-color);
+  font-size: 2rem;
+}
+
+.MuiTypography-h2 {
+  color: var(--h2-text-color);
+  font-size: 1.5rem;
+}
+
+.MuiTypography-h3 {
+  color: var(--h3-text-color);
+  font-size: 1.25rem;
+}
+
+.MuiTypography-h4 {
+  color: var(--h4-text-color);
+  font-size: 1rem;
+}
+
+.MuiTypography-h5 {
+  color: var(--h5-text-color);
+  font-size: 0.875rem;
+}
+
+.MuiTypography-h6 {
+  color: var(--h6-text-color);
+  font-size: 0.875rem;
+}
+
+.MuiTypography-subtitle1{
+  color: var(--text-secondary-color);
+}
+
+.MuiTypography-subtitle2{
+  color: var(--text-third-color);
+}
+
+.MuiTypography-body1{
+  color: var(--text-color);
+}
+
+.MuiTypography-body1{
+  color: var(--text-black-color);
+}
+
+.googleIcon, .facebookIcon, .twitterIcon, .githubIcon, .appleIcon {
+  color: var(--icon-color);
+}
+.apple-button {
+  background-color: black !important;
+}
+
+.facebook-button {
+  background-color: rgb(0, 102, 255) !important;
+}
+
+.google-button {
+  background-color: rgb(255, 65, 65) !important;
+}
 #root {
-  width: 100%; 
-  margin: 0; 
-  padding: 0; 
+  width: 100%;
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
   text-align: center;
 }

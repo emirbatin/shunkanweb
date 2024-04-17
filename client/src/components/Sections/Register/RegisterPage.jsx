@@ -4,62 +4,108 @@ import Button from "@mui/material/Button";
 import AppleIcon from "@mui/icons-material/Apple";
 import Google from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import "./RegisterPage.css";
+import { Typography } from "@mui/material";
 
-const Sections3 = ({ goToNextSection }) => {
+const Sections3 = ({ onCreateAccount, goToNextSection }) => {
   const { t } = useTranslation();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [termandCondition, setTermandCondition] = useState(false);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
+    onCreateAccount("username", event.target.value);
+    console.log("username: ", event.target.value);
+  };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+    onCreateAccount("email", event.target.value);
+    console.log("email: ", event.target.value);
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+    onCreateAccount("password", event.target.value);
+    console.log("password: ", event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(username, password);
+  const handleTermandConditionChange = (event) => {
+    setTermandCondition(event.target.checked);
+    onCreateAccount("termandCondition", event.target.checked);
+    console.log("termandCondition: ", event.target.checked);
   };
 
   return (
     <div className="register-section">
-      <div className="register-container">
-        <h1 className="register-title">
+      <div className="flex flex-col justify-center items-center w-full h-full">
+        <Typography
+          className="mt-8 mb-4 flex flex-row justify-start"
+          variant="h6"
+        >
           {t(
-            "Nice to meet you! {userName}, We just need a few more steps to create your account."
+            "Nice to meet you!, We just need a few more steps to create your account."
           )}
-        </h1>
-        <div className="form-container">
-          <div class="form-left">
-            <form className="register-form" onSubmit={handleSubmit}>
-              <div className="input-container">
-                <p className="input-label">{t("username")}</p>
+        </Typography>
+        {/* Left Form */}
+        <div className="flex flex-row w-full h-full">
+          <div class="flex flex-grow flex-col justify-end items-end w-auto h-full">
+            <form className="register-form" style={{ marginTop: "5em" }}>
+              {/* Input Container */}
+              <div className="flex flex-col items-start text-left justify-between w-full mb-4">
+                <Typography
+                  variant="body2"
+                  style={{ marginBottom: 5, marginTop: 5 }}
+                >
+                  {t("username")}
+                </Typography>
                 <input
-                  className="input-field"
+                  class="p-4 w-7/5 border border-gray-300 rounded-md bg-input-area-bg-color text-text-color focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-transparent"
+                  style={{
+                    color: "var(--text-color)",
+                    backgroundColor: "var(--input-area-bg-color)",
+                  }}
                   type="text"
                   placeholder={t("username")}
                   value={username}
                   onChange={handleUsernameChange}
                 />
               </div>
-              <div className="input-container">
-                <p className="input-label">{t("email")}</p>
+
+              <div className="flex flex-col items-start text-left justify-between w-full mb-4">
+                <Typography
+                  variant="body2"
+                  style={{ marginBottom: 5, marginTop: 5 }}
+                >
+                  {t("email")}
+                </Typography>
                 <input
-                  className="input-field"
+                  class="p-4 w-7/5 border border-gray-300 rounded-md bg-input-area-bg-color text-text-color focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-transparent"
+                  style={{
+                    color: "var(--text-color)",
+                    backgroundColor: "var(--input-area-bg-color)",
+                  }}
                   type="email"
                   placeholder={t("email")}
-                  value={username}
-                  onChange={handleUsernameChange}
+                  value={email}
+                  onChange={handleEmailChange}
                 />
               </div>
 
-              <div className="input-container">
-                <p className="input-label">{t("password")}</p>
+              <div className="flex flex-col items-start justify-between w-full mb-4">
+                <Typography
+                  variant="body2"
+                  style={{ marginBottom: 5, marginTop: 5 }}
+                >
+                  {t("password")}
+                </Typography>
                 <input
-                  className="input-field"
+                  class="p-4 w-7/5 border border-gray-300 rounded-md bg-input-area-bg-color text-text-color focus:outline-none focus:ring-2 focus:ring-rose-200 focus:border-transparent"
+                  style={{
+                    color: "var(--text-color)",
+                    backgroundColor: "var(--input-area-bg-color)",
+                  }}
                   type="password"
                   placeholder={t("password")}
                   value={password}
@@ -69,6 +115,7 @@ const Sections3 = ({ goToNextSection }) => {
                 {/*Button  */}
                 <Button
                   className="next-section-button"
+                  style={{ marginTop: 50 }}
                   variant="contained"
                   type="button"
                   onClick={goToNextSection}
@@ -77,21 +124,39 @@ const Sections3 = ({ goToNextSection }) => {
                 </Button>
               </div>
 
-              <div className="agreement-container">
-                {/*Checkbox */}
-                <div className="agreement-checkbox-container">
+              {/* Agreement Container */}
+              <div className="flex flex-col justify-start items-start">
+                {/*Checkbox Container*/}
+                <div className="flex flex-row justify-center items-center">
                   <input
                     id="agreement"
                     className="agreement-checkbox"
                     type="checkbox"
+                    value={termandCondition}
+                    onChange={handleTermandConditionChange}
                   ></input>
-                  <div className="agreement-label-container">
+                  {/*Checkbox Label Container*/}
+                  <div className="flex flex-col justify-start items-start ml-4">
                     <label htmlFor="agreement" className="agreement-label">
                       {t("I agree to the terms and conditions")}
                     </label>
-                    <div className="terms-privacy-container">
-                      <a className="terms-label">Terms & Conditions</a>
-                      <a className="privacy-label">Privacy Policy</a>
+                    {/*Terms and Privacy Container*/}
+                    <div className="flex flex-row justify-start items-start">
+                      {/* Terms Label */}
+                      <a
+                        className="cursor-pointer mr-8"
+                        style={{ color: "var(--button-color)" }}
+                      >
+                        Terms & Conditions
+                      </a>
+
+                      {/* Privacy Label */}
+                      <a
+                        className="cursor-pointer mr-8"
+                        style={{ color: "var(--button-color)" }}
+                      >
+                        Privacy Policy
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -100,38 +165,62 @@ const Sections3 = ({ goToNextSection }) => {
               </div>
             </form>
           </div>
-          <div className="form-middle">
-            <div className="form-or-container">
-              <hr className="form-line" />
-              <p className="form-or-text">{t("or")}</p>
-              <hr className="form-line" />
+
+          {/* Middle Form */}
+          <div
+            className="flex flex-grow flex-col justify-center items-center"
+            style={{ marginTop: "2rem" }}
+          >
+            {/* Form Or Container */}
+            <div className="grid-cols-3">
+              <hr
+                className="w-1 h-40 border-none rounded-md m-8"
+                style={{ backgroundColor: "var(--button-color)" }}
+              />
+              <Typography variant="h5" style={{ color: "var(--button-color)" }}>
+                {t("or")}
+              </Typography>
+              <hr
+                className="w-1 h-40 border-none rounded-md m-8"
+                style={{ backgroundColor: "var(--button-color)" }}
+              />
             </div>
           </div>
 
-          <div class="form-right">
-            <div className="social-register-container">
+          {/* Right Form */}
+          <div
+            class="flex flex-grow flex-col justify-start items-start w-auto h-full"
+            style={{ marginTop: "8.5rem" }}
+          >
+            <div className="flex flex-col justify-center items-center">
+              {/* Apple Login Buttons */}
               <Button
-                className="apple-register-button"
+                className="w-52 rounded-md cursor-pointer apple-button"
+                style={{ marginBottom: 40 }}
                 variant="contained"
-                startIcon={<AppleIcon />}
+                startIcon={<AppleIcon className="appleIcon" />}
                 type="button"
               >
                 {t("signinwithapple")}
               </Button>
 
+              {/* Facebook Login Buttons */}
               <Button
-                className="facebook-register-button"
+                className="w-52 rounded-md cursor-pointer facebook-button"
+                style={{ marginBottom: 40 }}
                 variant="contained"
-                startIcon={<FacebookIcon />}
+                startIcon={<FacebookIcon className="facebookIcon" />}
                 type="button"
               >
                 {t("signinwithfacebook")}
               </Button>
 
+              {/* Google Login Buttons */}
               <Button
-                className="google-register-button"
+                className="w-52 rounded-md cursor-pointer google-button"
+                style={{ marginBottom: 40 }}
                 variant="contained"
-                startIcon={<Google />}
+                startIcon={<Google className="googleIcon" />}
                 type="button"
               >
                 {t("signinwithgoogle")}
