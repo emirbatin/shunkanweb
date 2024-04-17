@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import DarkModeIcon from '@mui/icons-material/DarkMode'; // Dark mode icon
 import LightModeIcon from '@mui/icons-material/LightMode'; // Light mode icon
 import Brightness4Icon from '@mui/icons-material/Brightness4'; // System default icon (for auto theme)
-import './ChangeTheme.css';
 
 const ThemeSelector = () => {
   const { t } = useTranslation();

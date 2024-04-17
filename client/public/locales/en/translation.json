@@ -47,5 +47,13 @@
    "feedback" : "Feedback",
    "search" : "Search",
    "startLesson": "Start Lesson",
-   "hours" : "Hours"
+   "hours" : "Hours",
+   "rememberme": "Remember Me",
+   "turkish" : "Turkish",
+   "english" : "English",
+   "japanese" : "Japanese",
+   "american" : "American",
+   "selectthesignlanguageyouwanttolearn" : "Select the sign language you want to learn",
+   "whatshouldwecallyou":"What should we call you?",
+   "Nicetomeetyou!Wejustneedafewmorestepstocreateyouraccount": "Nice to meet you!, We just need a few more steps to create your account."
 }

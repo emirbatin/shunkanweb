@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import "./CameraAccess.css";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
-const Section4 = ({ goToNextSection }) => {
+const Section4 = ({ onCameraAccess, goToNextSection }) => {
   const { t } = useTranslation();
   const [isCameraOn, setIsCameraOn] = useState(
     localStorage.getItem("cameraAccess") === "true" // Set initial state from localStorage
   );
   const videoRef = useRef(null);
+  const [cameraAccess, setCameraAccess] = useState(false);
+
+  const handleCameraAccessChange = (event) => {
+    setCameraAccess(event.target.checked);
+    onCameraAccess(event.target.checked);
+    console.log("cameraAccess: ", event.target.checked);
+  };
 
   useEffect(() => {
     if (isCameraOn) {
@@ -56,48 +63,51 @@ const Section4 = ({ goToNextSection }) => {
   };
 
   return (
-    <div className="camera-access-container">
-      <div className="camera-preview">
-        <div className="cameraView">
+    <div className="flex flex-row items-center justify-center h-screen w-auto pb-28">
+      <div className="flex items-center justify-center mr-12">
+        <div className="flex w-80 h-80 bg-gray-700 rounded-lg">
           <video
             ref={videoRef}
             autoPlay
             playsInline
             muted
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "10px",
-            }}
+            className="w-full h-full object-cover rounded-lg"
           ></video>
         </div>
       </div>
-      <div className="cameraAccessPermission">
-        <label className="cameraAccessLabel" htmlFor="cameraAccessCheckbox">
+      <div className="flex flex-col items-start justify-center w-80 h-80 rounded-lg">
+        <label
+          className="flex flex-row items-center"
+          htmlFor="cameraAccessCheckbox"
+        >
           <input
             id="cameraAccessCheckbox"
             type="checkbox"
             checked={isCameraOn}
-            onChange={() => setIsCameraOn(!isCameraOn)}
+            onChange={(event) => {
+              setIsCameraOn(!isCameraOn);
+              handleCameraAccessChange(event);
+            }}
+            className="w-6 h-6 mt-2"
           />
-          <h2 className="cameraAccessLabel">{t("Allow camera access")}</h2>
+          <Typography variant="h5" style={{paddingLeft:10}}>
+            {t("Allow camera access")}
+          </Typography>
         </label>
-        <p className="textForPerm">
+        <p className="text-left my-4">
           Access to your camera will help improve our artificial intelligence
           system's accuracy and enhance your learning experience by providing
           more personalized and effective interactions.
         </p>
         <Button
-        className="nextSectionButton"
-        variant="contained"
-        type="button"
-        onClick={handleNextSectionClick}>
+          className="nextSectionButton"
+          variant="contained"
+          onClick={handleNextSectionClick}
+        >
           {t("continue")}
         </Button>
       </div>
     </div>
   );
 };
-
 export default Section4;
