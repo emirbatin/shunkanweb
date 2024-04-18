@@ -52,14 +52,15 @@ const ProfilePage = () => {
   if (!user) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-row text-center">
+    <div className="flex w-auto h-full justify-start items-start flex-row">
       {/* Sidebar Component */}
-      <Sidebar />
-      <div className="flex flex-col h-[20rem]">
+      <Sidebar></Sidebar>
+
+      <div className="flex flex-col h-full w-full px-5"> {/*Daha sonra full olarak değiştireceğim*/}
         {/* Profile Page */}
         <div className="flex flex-grow flex-row items-center">
-          <div className="flex flex-col items-center justify-center w-60 h-80 absolute z-10 bg-white bg-opacity-30 backdrop-blur-md">
-            <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start justify-center w-60 h-80 relative z-10 bg-white bg-opacity-20 backdrop-blur-md">
+            <div className="flex flex-col items-start ml-4">
               <img
                 className="w-40 h-40 object-cover rounded-full mb-2"
                 src={
@@ -75,9 +76,9 @@ const ProfilePage = () => {
             </div>
             <div>
               <Button
-              style={{ marginTop: "1rem" }}
+                style={{ marginTop: "2rem" }}
                 onClick={() => navigate(`/editprofile/${userId}`)}
-                variant="contained"
+                variant="text"
                 color="primary"
               >
                 Edit
@@ -92,8 +93,24 @@ const ProfilePage = () => {
             />
           </div>
         </div>
-        <div>
-          <h1>sa</h1>
+        <div className="flex flex-col">
+          {/* User Statistic */}
+
+          <div className="flex items-start justify-start text-left">
+            <Typography variant="h5">User Statistics</Typography>
+          </div>
+          <div className="flex flex-row">
+            {/*Right Container */}
+            <div className="flex flex-col flex-grow">
+              <Typography variant="h7">User Information</Typography>
+            </div>
+
+            {/* Left Container */}
+
+            <div className="flex flex-col flex-grow">
+              <Typography variant="h7">User Information</Typography>
+            </div>
+          </div>
         </div>
       </div>
     </div>
