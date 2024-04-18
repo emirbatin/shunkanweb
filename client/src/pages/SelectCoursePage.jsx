@@ -90,7 +90,7 @@ const SelectCoursePage = () => {
           <Sidebar></Sidebar>
 
         {/* Right Container */}
-        <div class="grid grid-cols-4 gap-1 items-start flex-grow p-5">
+        <div className="grid grid-cols-4 gap-1 items-start flex-grow p-5">
           {courses &&
             courses.map((course) => (
               <div key={course._id} className="w-full p-2">
