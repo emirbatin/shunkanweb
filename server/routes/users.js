@@ -34,7 +34,7 @@ router.get("/", getAllUsers);
 router.get("/:id", getUserById); 
 
 //Post a new user
-router.post("/", upload.single('image'), createUser);
+router.post("/", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), createUser);
 
 //Delete a user
 router.delete("/:id", deleteUser);
