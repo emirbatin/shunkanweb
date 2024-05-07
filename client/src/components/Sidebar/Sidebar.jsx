@@ -77,7 +77,7 @@ const Sidebar = () => {
           <br />
           <li><Link className="route-link" to={`/profile/${userId}`}>{t("profile")}</Link></li>
           <br />
-          <li><Link className="route-link" to="/settings">{t("settings")}</Link></li>
+          <li><Link className="route-link" to={`/settings/${userId}`}>{t("settings")}</Link></li>
         </ul>
       </div>
       <div className="sidebar-logout">

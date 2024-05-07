@@ -29,5 +29,6 @@ router.delete("/:id", deleteCourse);
 
 //Update a course
 router.patch("/:id", upload.single('image'), updateCourse);
+  
 
 module.exports = router;

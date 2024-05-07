@@ -19,7 +19,6 @@ const SelectCoursePage = () => {
   const [userId, setUserId] = useState("");
   const [userProfilePicture, setUserProfilePicture] = useState("");
 
-
   useEffect(() => {
     console.log("Token:", userToken);
 
@@ -87,12 +86,12 @@ const SelectCoursePage = () => {
       {/* Courses Container */}
       <div className="flex w-auto h-full justify-start items-start flex-row">
         {/* Left Sidebar Container */}
-          <Sidebar></Sidebar>
+        <Sidebar></Sidebar>
 
         {/* Right Container */}
         <div className="grid grid-cols-4 gap-1 items-start flex-grow p-5">
           {courses &&
-            courses.map((course) => (
+            [...courses].reverse().map((course) => (
               <div key={course._id} className="w-full p-2">
                 <CourseDetails course={course} />
               </div>

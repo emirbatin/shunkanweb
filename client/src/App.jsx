@@ -9,6 +9,7 @@ import SelectCoursePage from "./pages/SelectCoursePage.jsx";
 import CourseContentPage from "./pages/CourseContentPage.jsx"
 import ProfilePage from "./pages/ProfilePage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
+import UserSettingsPage from "./pages/UserSettingsPage.jsx";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/editprofile/:userId" element={<EditProfilePage />} />
           <Route path="/courses" element={<SelectCoursePage />} />
           <Route path="/course/:courseId" element={<CourseContentPage />} />
+          <Route path="/settings/:userId" element={<UserSettingsPage />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </div>

@@ -1,23 +1,45 @@
 const User = require("../models/userModel.js");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const fs = require("fs");
 const path = require("path");
 const saltRounds = 10;
-const jwt = require('jsonwebtoken');
-
+const jwt = require("jsonwebtoken");
 
 // Kullanıcı Kaydı
-
 exports.createUser = async (req, res) => {
-  const { name, username, email, password, termsandConditions, cameraAccess, plan, role, language } = req.body;
+  const {
+    name,
+    username,
+    email,
+    password,
+    termsandConditions,
+    cameraAccess,
+    plan,
+    role,
+    language,
+  } = req.body;
+
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    let imagePath;
-    if (req.file) {
-      const uploadDir = 'uploads';
-      const fileName = path.basename(req.file.path);
-      imagePath = `${uploadDir}/${fileName}`;
+    let imagePath, bannerPath;
+
+    // Assuming 'image' and 'banner' are the field names for the uploaded files
+    if (req.files) {
+      const uploadDir = "uploads";
+
+      // Handle profile image if uploaded
+      if (req.files.image) {
+        const imageFileName = path.basename(req.files.image[0].path); // Adjust based on your file structure
+        imagePath = `${uploadDir}/${imageFileName}`;
+      }
+
+      // Handle banner image if uploaded
+      if (req.files.banner) {
+        const bannerFileName = path.basename(req.files.banner[0].path); // Adjust based on your file structure
+        bannerPath = `${uploadDir}/${bannerFileName}`;
+      }
     }
+
     const user = await User.create({
       language,
       name,
@@ -25,15 +47,21 @@ exports.createUser = async (req, res) => {
       email,
       password: hashedPassword,
       imagePath,
+      bannerPath,
       termsandConditions,
       cameraAccess,
       plan,
       role,
     });
-    // Resim URL'sini oluşturun ve kullanıcı objesine ekleyin
-    if (user.imagePath) {
-      user.imageUrl = `${req.protocol}://${req.get("host")}/${user.imagePath}`;
+
+    // Append URLs if paths are available
+    if (imagePath) {
+      user.imageUrl = `${req.protocol}://${req.get("host")}/${imagePath}`;
     }
+    if (bannerPath) {
+      user.bannerUrl = `${req.protocol}://${req.get("host")}/${bannerPath}`;
+    }
+
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -47,13 +75,15 @@ exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username: username });
-    
+
     if (user) {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (isPasswordMatch) {
         // JWT token oluştur
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-        
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+          expiresIn: "24h",
+        });
+
         // Giriş başarılı, token ile birlikte kullanıcı bilgilerini döndür
         res.json({ user: user._id, token, message: "Logged in successfully" });
       } else {
@@ -92,14 +122,20 @@ exports.getUserById = async (req, res) => {
     // Kullanıcı objesine imageUrl alanı ekleyin
     const userObject = user.toObject();
     if (userObject.imagePath) {
-      userObject.imageUrl = `${req.protocol}://${req.get("host")}/${userObject.imagePath}`;
+      userObject.imageUrl = `${req.protocol}://${req.get("host")}/${
+        userObject.imagePath
+      }`;
+    }
+    if (userObject.bannerPath) {
+      userObject.bannerUrl = `${req.protocol}://${req.get("host")}/${
+        userObject.bannerPath
+      }`;
     }
     res.send(userObject);
   } catch (error) {
     res.status(500).send(error);
   }
 };
-
 
 // Kullanıcı Güncelleme
 
@@ -113,14 +149,16 @@ exports.updateUser = async (req, res) => {
     const updates = req.body;
     if (req.file) {
       // Eski resmi sil
-      const oldFilePath = user.imagePath ? path.join(__dirname, '..', user.imagePath) : null;
+      const oldFilePath = user.imagePath
+        ? path.join(__dirname, "..", user.imagePath)
+        : null;
       if (oldFilePath) {
-        fs.unlink(oldFilePath, err => {
+        fs.unlink(oldFilePath, (err) => {
           if (err) console.error("Failed to delete the old image file:", err);
         });
       }
       // Yeni resim yolu
-      const uploadDir = 'uploads';
+      const uploadDir = "uploads";
       const fileName = path.basename(req.file.path);
       user.imagePath = `${uploadDir}/${fileName}`;
     }
@@ -128,8 +166,8 @@ exports.updateUser = async (req, res) => {
       user.password = await bcrypt.hash(updates.password, saltRounds);
     }
     // Diğer güncellemeler
-    Object.keys(updates).forEach(update => {
-      if (update !== 'password') user[update] = updates[update];
+    Object.keys(updates).forEach((update) => {
+      if (update !== "password") user[update] = updates[update];
     });
     await user.save();
     // Resim URL'sini güncelle
@@ -141,7 +179,6 @@ exports.updateUser = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
 
 // Kullanıcı Silme
 

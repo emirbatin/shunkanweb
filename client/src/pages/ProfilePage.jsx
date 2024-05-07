@@ -12,6 +12,7 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [userProfilePicture, setUserProfilePicture] = useState("");
+  const [userBannerPicture, setUserBannerPicture] = useState("");
   const [username, setUsername] = useState("");
   const [userPerm, setUserPerm] = useState("");
   const formattedName = capitalizeFirstLetter(username);
@@ -32,6 +33,7 @@ const ProfilePage = () => {
       if (!res.ok) throw new Error(userData.error || "Bir hata oluştu");
       setUsername(userData.username);
       setUserProfilePicture(userData.imageUrl);
+      setUserBannerPicture(userData.bannerUrl);
       setUserPerm(userData.role);
     } catch (error) {
       console.error("Kullanıcı bilgileri alınamadı:", error);
@@ -87,8 +89,11 @@ const ProfilePage = () => {
           </div>
           <div className="w-full h-[20rem] absolute z-0">
             <img
-              src="https://images3.alphacoders.com/133/1332803.png"
-              alt=""
+              src={
+                userBannerPicture ||
+                "https://images3.alphacoders.com/133/1332803.png"
+              }
+              alt="user"
               className="absolute w-full h-full object-cover"
             />
           </div>

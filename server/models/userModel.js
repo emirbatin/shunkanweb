@@ -44,6 +44,11 @@ const userSchema = new Schema(
       type: String,
       required: false, // Resim yükleme opsiyonel olduğu için bu alan zorunlu olmayabilir
     },
+    bannerPath: {
+      // Yüklenen resmin dosya yolunu saklamak için yeni alan
+      type: String,
+      required: false, // Resim yükleme opsiyonel olduğu için bu alan zorunlu olmayabilir
+    },
     emailConfirmed: {
       type: Boolean,
       required: false,
