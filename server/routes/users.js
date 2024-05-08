@@ -40,7 +40,7 @@ router.post("/", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'banner'
 router.delete("/:id", deleteUser);
 
 //Update a user
-router.patch("/:id", upload.single('image'), updateUser);
+router.patch("/:id", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), updateUser);
 
 module.exports = router;
 

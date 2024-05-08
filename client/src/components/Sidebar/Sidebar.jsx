@@ -7,16 +7,15 @@ import { Typography } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import { capitalizeFirstLetter } from "../../utils/stringUtils";
 
-const Sidebar = () => {
+const Sidebar = ({ userProfilePicture }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [userPerm, setUserPerm] = useState("");
-  const [userProfilePicture, setUserProfilePicture] = useState("");
   const [userId, setUserId] = useState("");
-  
+
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
-  
+
   const formattedName = capitalizeFirstLetter(username);
   const formattedPerm = capitalizeFirstLetter(userPerm);
 
@@ -36,7 +35,6 @@ const Sidebar = () => {
         throw new Error(userData.error || "Bir hata oluştu");
       }
       setUsername(userData.username);
-      setUserProfilePicture(userData.imageUrl);
       setUserPerm(userData.role);
     } catch (error) {
       console.error("Kullanıcı bilgileri alınamadı:", error);
@@ -51,7 +49,6 @@ const Sidebar = () => {
   };
 
   return (
-    // Sidebar componenti
     <div className="flex flex-col items-start justify-start text-left w-60 h-[90vh] pl-5">
       <div className="flex flex-row items-center justify-center box-border">
         <div className="flex flex-row items-center justify-center box-border">
