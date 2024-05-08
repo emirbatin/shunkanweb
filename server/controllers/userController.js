@@ -146,34 +146,44 @@ exports.updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
     const updates = req.body;
-    if (req.file) {
-      // Eski resmi sil
-      const oldFilePath = user.imagePath
-        ? path.join(__dirname, "..", user.imagePath)
-        : null;
-      if (oldFilePath) {
-        fs.unlink(oldFilePath, (err) => {
-          if (err) console.error("Failed to delete the old image file:", err);
-        });
+
+    // Profile Image Update
+    if (req.files && req.files.image) {
+      const oldImagePath = user.imagePath ? path.join(__dirname, "..", user.imagePath) : null;
+      if (oldImagePath && fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
       }
-      // Yeni resim yolu
       const uploadDir = "uploads";
-      const fileName = path.basename(req.file.path);
-      user.imagePath = `${uploadDir}/${fileName}`;
+      const imageFileName = path.basename(req.files.image[0].path);
+      user.imagePath = `${uploadDir}/${imageFileName}`;
+      user.imageUrl = `${req.protocol}://${req.get("host")}/${user.imagePath}`;
     }
+
+    // Banner Image Update
+    if (req.files && req.files.banner) {
+      const oldBannerPath = user.bannerPath ? path.join(__dirname, "..", user.bannerPath) : null;
+      if (oldBannerPath && fs.existsSync(oldBannerPath)) {
+        fs.unlinkSync(oldBannerPath);
+      }
+      const uploadDir = "uploads";
+      const bannerFileName = path.basename(req.files.banner[0].path);
+      user.bannerPath = `${uploadDir}/${bannerFileName}`;
+      user.bannerUrl = `${req.protocol}://${req.get("host")}/${user.bannerPath}`;
+    }
+
+    // Password Update
     if (updates.password) {
       user.password = await bcrypt.hash(updates.password, saltRounds);
     }
-    // Diğer güncellemeler
+
+    // Other Updates
     Object.keys(updates).forEach((update) => {
       if (update !== "password") user[update] = updates[update];
     });
+
     await user.save();
-    // Resim URL'sini güncelle
-    if (user.imagePath) {
-      user.imageUrl = `${req.protocol}://${req.get("host")}/${user.imagePath}`;
-    }
     res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });

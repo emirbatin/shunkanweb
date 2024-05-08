@@ -5,6 +5,9 @@ export default {
   ],
   theme: {
     extend: {
+      color: {
+        
+      },
       width: {
         'full-150': '150%',
         '7/5' : '30rem'
