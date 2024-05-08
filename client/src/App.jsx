@@ -10,9 +10,11 @@ import CourseContentPage from "./pages/CourseContentPage.jsx"
 import ProfilePage from "./pages/ProfilePage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
 import UserSettingsPage from "./pages/UserSettingsPage.jsx";
+import { UserProvider } from "./context/UserContext.jsx";
 
 function App() {
   return (
+    <UserProvider>
     <Router>
       <div>
         <CustomAppBar showIconButton={false} showThemeButton={true} />
@@ -29,6 +31,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </UserProvider>
   );
 }
 

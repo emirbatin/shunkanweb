@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from "react";
+// components/Sidebar/Sidebar.jsx
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Typography } from "@mui/material";
-import { jwtDecode } from "jwt-decode";
+import { useUser } from "../../context/UserContext";
+import {jwtDecode} from "jwt-decode";
 import { capitalizeFirstLetter } from "../../utils/stringUtils";
 
-const Sidebar = ({ userProfilePicture }) => {
+const Sidebar = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [userPerm, setUserPerm] = useState("");
-  const [userId, setUserId] = useState("");
+  const {
+    username,
+    setUsername,
+    userPerm,
+    setUserPerm,
+    sidebarProfilePicture,
+    setSidebarProfilePicture,
+    userId,
+    setUserId,
+  } = useUser();
 
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
 
@@ -35,6 +44,7 @@ const Sidebar = ({ userProfilePicture }) => {
         throw new Error(userData.error || "Bir hata oluştu");
       }
       setUsername(userData.username);
+      setSidebarProfilePicture(userData.imageUrl);
       setUserPerm(userData.role);
     } catch (error) {
       console.error("Kullanıcı bilgileri alınamadı:", error);
@@ -54,7 +64,7 @@ const Sidebar = ({ userProfilePicture }) => {
         <div className="flex flex-row items-center justify-center box-border">
           <img
             className="w-16 h-16 rounded-full object-cover mr-2"
-            src={userProfilePicture || "https://cdn.pixabay.com/photo/2015/04/18/11/03/profile-728591_1280.jpg"}
+            src={sidebarProfilePicture || "https://cdn.pixabay.com/photo/2015/04/18/11/03/profile-728591_1280.jpg"}
             alt="user"
           />
           <div className="flex flex-col">
