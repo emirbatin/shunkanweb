@@ -1,23 +1,31 @@
+// pages/ProfilePage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
-import { jwtDecode } from "jwt-decode";
-import { capitalizeFirstLetter } from "../utils/stringUtils";
+import {jwtDecode} from "jwt-decode";
 import Sidebar from "../components/Sidebar/Sidebar";
 import StatisticCards from "../components/StatisticCard/StatisticCards";
 import FlameImage from "../assets/illustrations/flame.png";
 import BadgeImage from "../assets/illustrations/badge.png";
+import { useUser } from "../context/UserContext";
+import { capitalizeFirstLetter } from "../utils/stringUtils";
 
 const ProfilePage = () => {
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
   const { userId } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [userProfilePicture, setUserProfilePicture] = useState("");
-  const [sidebarProfilePicture, setSidebarProfilePicture] = useState(""); // Yeni eklenen durum
+  const {
+    username,
+    setUsername,
+    userPerm,
+    setUserPerm,
+    userProfilePicture,
+    setUserProfilePicture,
+    setUserId,
+    sidebarProfilePicture,
+    setSidebarProfilePicture,
+  } = useUser();
   const [userBannerPicture, setUserBannerPicture] = useState("");
-  const [username, setUsername] = useState("");
-  const [userPerm, setUserPerm] = useState("");
   const [userDailySeries, setUserDailySeries] = useState(0);
   const [userTotalPoint, setUserTotalPoint] = useState(0);
   const [userRank, setUserRank] = useState("Bronze");
@@ -26,9 +34,9 @@ const ProfilePage = () => {
   const [bannerImageFile, setBannerImageFile] = useState(null);
 
   useEffect(() => {
-    console.log("Token:", userToken);
     if (userToken) {
       const data = jwtDecode(userToken);
+      setUserId(data.id);
       fetchUserDetails(data.id);
     }
   }, [userToken]);
@@ -38,10 +46,9 @@ const ProfilePage = () => {
       const res = await fetch(`/api/users/${userId}`);
       const userData = await res.json();
       if (!res.ok) throw new Error(userData.error || "Bir hata oluştu");
-      setUser(userData);
       setUsername(userData.username);
       setUserProfilePicture(userData.imageUrl);
-      setSidebarProfilePicture(userData.imageUrl); // Sidebar resmi güncellenir
+      setSidebarProfilePicture(userData.imageUrl);
       setUserBannerPicture(userData.bannerUrl);
       setUserPerm(userData.role);
       setUserDailySeries(userData.dailySeries || 0);
@@ -69,8 +76,8 @@ const ProfilePage = () => {
         if (!res.ok) throw new Error("Failed to update user");
         const updatedUser = await res.json();
         setUserProfilePicture(updatedUser.imageUrl);
+        setSidebarProfilePicture(updatedUser.imageUrl);
         setUserBannerPicture(updatedUser.bannerUrl);
-        setSidebarProfilePicture(updatedUser.imageUrl); // Sidebar resmi güncellenir
         fetchUserDetails(userId);
       } catch (error) {
         console.error("Error updating user:", error);
@@ -99,12 +106,11 @@ const ProfilePage = () => {
     setUserBannerPicture(url);
   };
 
-  if (!user) return <div>Loading...</div>;
+  if (!username) return <div>Loading...</div>;
 
   return (
     <div className="flex w-auto h-full justify-start items-start flex-row">
-      {/* Sidebar Component */}
-      <Sidebar userProfilePicture={sidebarProfilePicture} />
+      <Sidebar />
 
       <div className="flex flex-col h-full w-full px-5">
         <div className="flex flex-grow flex-row items-center">
