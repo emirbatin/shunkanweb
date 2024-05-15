@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import LottieAnimation from "../components/LootieAnimation/lootieAnimation.jsx";
 import LoadingLootie from "../assets/lottie/Manwithglassessittingonmonitorandlookingup.json";
 
-const FirstCoursePage = () => {
+const CourseContentPage = () => {
   const { t } = useTranslation();
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -268,4 +268,4 @@ const FirstCoursePage = () => {
   );
 };
 
-export default FirstCoursePage;
+export default CourseContentPage;
