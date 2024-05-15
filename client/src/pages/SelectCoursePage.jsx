@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"; // useState'i import edin
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -14,26 +14,20 @@ import Sidebar from "../components/Sidebar/Sidebar.jsx";
 const SelectCoursePage = () => {
   const userToken =
     sessionStorage.getItem("token") || localStorage.getItem("token");
-  const [username, setUsername] = useState(""); // useState kullanarak username durumunu yönetin
+  const [username, setUsername] = useState(""); 
   const [userPerm, setUserPerm] = useState("");
   const [userId, setUserId] = useState("");
   const [userProfilePicture, setUserProfilePicture] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Token:", userToken);
-
-    // Eğer kullanıcı token'ı varsa, bu token'ı decode edin ve kullanıcı bilgilerini çekin
     if (userToken) {
       const data = jwtDecode(userToken);
-      // Kullanıcı detaylarını çekmek için ayrı bir useEffect içinde API çağrısı yapın
+      setUserId(data.id);
       fetchUserDetails(data.id);
-    }
-  }, [userToken]);
-
-  useEffect(() => {
-    if (userToken) {
-      const data = jwtDecode(userToken);
-      setUserId(data.id); // Decode edilen token'dan elde edilen ID'yi state'e kaydet
     }
   }, [userToken]);
 
@@ -49,54 +43,74 @@ const SelectCoursePage = () => {
       setUsername(userData.username);
       setUserProfilePicture(userData.imageUrl);
       setUserPerm(userData.role);
+      setLoading(false);
     } catch (error) {
       console.error("Kullanıcı bilgileri alınamadı:", error);
-      // Hata durumunda da kullanıcıyı login sayfasına yönlendir
       navigate("/login");
     }
   };
 
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { courses, dispatch } = useCoursesContext();
   const formattedName = capitalizeFirstLetter(username);
   const formattedPerm = capitalizeFirstLetter(userPerm);
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const res = await fetch("/api/courses");
-      const data = await res.json();
-      if (!res.ok) {
-        console.error(`Server responded with status code ${res.status}`);
-        return;
+      try {
+        const res = await fetch("/api/courses");
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(`Server responded with status code ${res.status}`);
+        }
+
+        dispatch({ type: "SET_COURSES", payload: data });
+      } catch (error) {
+        console.error("Dersler alınamadı:", error);
       }
-      dispatch({ type: "SET_COURSES", payload: data });
     };
 
     fetchCourses();
-  }, []);
+  }, [dispatch]);
 
-  // Rotalama işlevini tetiklemek için kullanılacak yöntem
   const handleNavigate = (path) => {
     navigate(path);
   };
 
   return (
-    <div>
-      {/* Courses Container */}
-      <div className="flex w-auto h-full justify-start items-start flex-row">
-        {/* Left Sidebar Container */}
-        <Sidebar></Sidebar>
+    <div className="flex flex-col md:flex-row h-full">
+      {/* Sidebar Toggle Button for Small Screens */}
+      <div className="md:hidden flex justify-start p-2">
+        <Button
+          variant="text"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+        </Button>
+      </div>
 
-        {/* Right Container */}
-        <div className="grid grid-cols-4 gap-1 items-start flex-grow p-5">
-          {courses &&
-            [...courses].reverse().map((course) => (
-              <div key={course._id} className="w-full p-2">
-                <CourseDetails course={course} />
-              </div>
-            ))}
-        </div>
+      {/* Left Sidebar Container */}
+      <div
+        className={`md:block transition-transform duration-300 ${
+          sidebarOpen ? "block" : "hidden"
+        }`}
+      >
+        <Sidebar />
+      </div>
+
+      {/* Right Container */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5 flex-grow">
+        {loading ? (
+          <Typography variant="h6">{t('loading')}</Typography>
+        ) : (
+          courses &&
+          [...courses].reverse().map((course) => (
+            <div key={course._id} className="w-full p-2">
+              <CourseDetails course={course} />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
