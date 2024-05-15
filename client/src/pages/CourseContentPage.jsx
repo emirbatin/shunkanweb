@@ -1,158 +1,174 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import LottieAnimation from "../components/LootieAnimation/lootieAnimation.jsx";
 import LoadingLootie from "../assets/lottie/Manwithglassessittingonmonitorandlookingup.json";
 
-
 const FirstCoursePage = () => {
   const { t } = useTranslation();
-  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const { courseId } = useParams();
   const navigate = useNavigate();
+
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [course, setCourse] = useState(null);
   const [question, setQuestion] = useState(null);
   const [loadingCourse, setLoadingCourse] = useState(true);
   const [loadingQuestion, setLoadingQuestion] = useState(true);
   const [tabContents, setTabContents] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(true);
+  const [isLastQuestion, setIsLastQuestion] = useState(false);
 
-  // Course bilgilerini getiren fonksiyon
-  const fetchCourse = async (courseId) => {
+  const fetchCourse = useCallback(async (courseId) => {
     setLoadingCourse(true);
     try {
       const response = await fetch(`/api/courses/${courseId}`);
       const data = await response.json();
       setCourse(data);
-      // setTabContents'i kullanarak tabContents state'ini güncelle
-      setTabContents(
-        Array.from(
-          { length: data.questions.length },
-          (_, index) => `İçerik ${index + 1}`
-        )
-      );
-      setLoadingCourse(false);
+      setTabContents(data.questions.map((_, index) => `İçerik ${index + 1}`));
     } catch (error) {
       console.error("Error fetching course details:", error);
+    } finally {
       setLoadingCourse(false);
     }
-  };
+  }, []);
 
-  // Soru bilgilerini getiren fonksiyon
-
-  const fetchQuestion = async (questionId, index) => {
+  const fetchQuestion = useCallback(async (questionId, index) => {
     setLoadingQuestion(true);
     try {
       const response = await fetch(`/api/questions/${questionId}`);
       const data = await response.json();
-      console.log(data); // API'den gelen veriyi konsola yazdır
-      // Doğru mediaUrl değerini belirle
       const mediaUrl = `http://localhost:4000/${data.mediaPath}`;
-      setQuestion({ ...data, mediaUrl }); // mediaUrl'i veriye ekle
-      setLoadingQuestion(false);
-      // Set mediaUrl for the corresponding tabContent
+      setQuestion({ ...data, mediaUrl });
       setTabContents((prevTabContents) => {
         const updatedTabContents = [...prevTabContents];
-        updatedTabContents[index] = mediaUrl; // Doğru mediaUrl'yi ekle
+        updatedTabContents[index] = mediaUrl;
         return updatedTabContents;
       });
     } catch (error) {
       console.error("Error fetching question details:", error);
+    } finally {
       setLoadingQuestion(false);
     }
-  };
-
-  // Sorunun içeriğini render etme fonksiyonu
-
-  const renderContent = (index) => {
-    switch (index) {
-      case 0:
-        console.log("Media URL:", question.mediaUrl);
-        return (
-          <div className="flex h-80 w-auto">
-            {question && question.mediaType === "image" ? (
-              <img
-                src={question.mediaUrl}
-                alt="Question media"
-                style={{ width: "100%", height: "auto" }}
-              />
-            ) : question && question.mediaType === "video" ? (
-              <video
-                src={question.mediaUrl}
-                controls
-                style={{ width: "100%", height: "auto" }}
-              />
-            ) : null}
-          </div>
-        );
-      default:
-        return (
-          <div
-            className="flex h-80 w-auto"
-            style={{ color: "white", fontSize: "20px" }}
-          >
-            {tabContents[index] && (
-              <img
-                src={tabContents[index]}
-                alt={`Media ${index}`}
-                style={{ width: "100%", height: "auto" }}
-              />
-            )}
-          </div>
-        );
-    }
-  };
-
-  // Her seçeneğin içeriğini almak için bir yardımcı fonksiyon
-  const getOptionContent = (option) => {
-    if (option && option.description) {
-      return option.description;
-    }
-    return "Seçenek Yok";
-  };
-
+  }, []);
 
   useEffect(() => {
     fetchCourse(courseId);
-  }, [courseId]);
-
-  useEffect(() => {
-    if (course && course.questions && course.questions[activeQuestionIndex]) {
-      const questionId = course.questions[activeQuestionIndex];
-      fetchQuestion(questionId);
-    }
-  }, [course, activeQuestionIndex]);
-
-  const handleBack = () => {
-    setActiveQuestionIndex((prevIndex) => Math.max(0, prevIndex - 1));
-  };
-
-  const handleNext = () => {
-    if (activeQuestionIndex < tabContents.length - 1) {
-      setActiveQuestionIndex(activeQuestionIndex + 1);
-    } else {
-      navigate("/courses");
-    }
-  };
+  }, [courseId, fetchCourse]);
 
   useEffect(() => {
     if (course && course.questions && course.questions[activeQuestionIndex]) {
       const questionId = course.questions[activeQuestionIndex];
       fetchQuestion(questionId, activeQuestionIndex);
     }
-  }, [course, activeQuestionIndex]);
+    setIsLastQuestion(
+      course && activeQuestionIndex === course.questions.length - 1
+    );
+  }, [course, activeQuestionIndex, fetchQuestion]);
 
-  if (loadingCourse || loadingQuestion)
-  return (
-    <div className="flex flex-col text-center items-center justify-center h-screen w-auto">
-      <div className="flex w-80 h-auto pb-40">
-      <LottieAnimation animationData={LoadingLootie} />
+  const handleOptionClick = useCallback((index) => {
+    setSelectedOption(index);
+  }, []);
+
+  const handleCheckAnswer = useCallback(() => {
+    let userAnswer = null;
+    let correctAnswer = question?.options.find(
+      (option) => option.label === question.correctAnswer
+    )?.description;
+
+    if (selectedOption !== null) {
+      userAnswer = question.options[selectedOption]?.description;
+    }
+
+    if (userAnswer !== correctAnswer) {
+      setWrongAnswers((prev) => [...prev, { correctAnswer, userAnswer }]);
+      setShowFeedback(true);
+      setIsAnswerCorrect(false);
+    } else {
+      setIsAnswerCorrect(true);
+      setShowFeedback(false);
+      if (isLastQuestion) {
+        handleFinish();
+      } else {
+        handleNextQuestion();
+      }
+    }
+  }, [selectedOption, question, isLastQuestion]);
+
+  const handleNextQuestion = useCallback(() => {
+    if (!isLastQuestion) {
+      setActiveQuestionIndex((prevIndex) => prevIndex + 1);
+      setSelectedOption(null);
+      setShowFeedback(false);
+      setIsAnswerCorrect(true);
+    }
+  }, [isLastQuestion]);
+
+  const handleSkip = useCallback(() => {
+    let correctAnswer = question?.options.find(
+      (option) => option.label === question.correctAnswer
+    )?.description;
+    setWrongAnswers((prev) => [...prev, { correctAnswer, userAnswer: null }]);
+
+    if (!isLastQuestion) {
+      handleNextQuestion();
+    } else {
+      handleFinish();
+    }
+  }, [question, isLastQuestion, handleNextQuestion]);
+
+  const handleFinish = useCallback(() => {
+    navigate("/courses");
+  }, [navigate]);
+
+  const renderContent = (index) => {
+    let mediaUrl = index === 0 ? question?.mediaUrl : tabContents[index];
+
+    return (
+      <div className="flex h-80 w-80 object-fill">
+        {mediaUrl ? (
+          <>
+            {question && question.mediaType === "image" ? (
+              <img
+                src={mediaUrl}
+                alt="Question media"
+                style={{ width: "100%", height: "auto" }}
+              />
+            ) : question && question.mediaType === "video" ? (
+              <video
+                src={mediaUrl}
+                controls
+                style={{ width: "100%", height: "auto" }}
+              />
+            ) : null}
+          </>
+        ) : (
+          <div style={{ color: "white", fontSize: "20px" }}>
+            No media available
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
-  if (!course || !question)
+  const getOptionContent = (option) => option?.description || "Seçenek Yok";
+
+  if (loadingCourse || loadingQuestion) {
+    return (
+      <div className="flex flex-col text-center items-center justify-center h-screen w-auto">
+        <div className="flex w-80 h-auto pb-40">
+          <LottieAnimation animationData={LoadingLootie} />
+        </div>
+      </div>
+    );
+  }
+
+  if (!course || !question) {
     return <div>Error: Course or Question not found.</div>;
+  }
 
   return (
     <div className="flex flex-col h-screen w-screen p-[8rem]">
@@ -177,8 +193,11 @@ const FirstCoursePage = () => {
                 question.options.map((option, index) => (
                   <Button
                     key={index}
-                    variant="contained"
+                    variant={
+                      selectedOption === index ? "contained" : "outlined"
+                    }
                     style={{ margin: 10 }}
+                    onClick={() => handleOptionClick(index)}
                   >
                     <Typography variant="text">{`${String.fromCharCode(
                       65 + index
@@ -192,18 +211,58 @@ const FirstCoursePage = () => {
           </div>
         </div>
       </div>
-      <br />
-      <div className="flex flex-row justify-center text-center items-center">
-        {activeQuestionIndex !== 0 && ( // Bir önceki içerik null değilse geri butonunu göster
-          <button onClick={handleBack} style={{ marginRight: "50px" }}>
-            <Typography variant="subtitle1">Back</Typography>
-          </button>
-        )}
-        <button onClick={handleNext}>
-          <Typography variant="subtitle1">
-            {activeQuestionIndex < tabContents.length - 1 ? "Next" : "Finish"}
-          </Typography>
-        </button>
+      <Typography variant="h6">Yanlış Cevaplar:</Typography>
+      {wrongAnswers.map((wrongAnswer, index) => (
+        <Typography key={index} variant="body1">
+          Doğru Cevap: {wrongAnswer.correctAnswer}, Seçtiğiniz Cevap:{" "}
+          {wrongAnswer.userAnswer !== null
+            ? wrongAnswer.userAnswer
+            : "Boş Geçildi"}
+        </Typography>
+      ))}
+
+      <div className="flex flex-row fixed bottom-8 left-0 right-0 w-full px-40">
+        <div className="flex w-full">
+          <div className="flex flex-grow justify-start">
+            {!isAnswerCorrect && (
+              <Typography variant="body1" color="error">
+                Cevap yanlış, doğru cevap:{" "}
+                {wrongAnswers[wrongAnswers.length - 1]?.correctAnswer}
+              </Typography>
+            )}
+            {!showFeedback &&
+              activeQuestionIndex < course?.questions?.length - 1 && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ margin: 10 }}
+                  onClick={handleSkip}
+                >
+                  Skip
+                </Button>
+              )}
+          </div>
+          <div className="flex flex-grow justify-end">
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ margin: 10 }}
+              onClick={
+                showFeedback
+                  ? isLastQuestion
+                    ? handleFinish
+                    : handleNextQuestion
+                  : handleCheckAnswer
+              }
+            >
+              {isLastQuestion && showFeedback
+                ? "Bitir"
+                : showFeedback
+                ? "Sonraki"
+                : "Kontrol Et"}
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

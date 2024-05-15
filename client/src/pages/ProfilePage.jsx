@@ -115,7 +115,7 @@ const ProfilePage = () => {
       <div className="flex flex-col h-full w-full px-5">
         <div className="flex flex-grow flex-row items-center">
           <div className="flex flex-col items-start justify-center w-60 h-80 relative z-10 bg-white bg-opacity-20 backdrop-blur-md">
-            <div className="flex flex-col items-start ml-4">
+            <div className="flex flex-col items-start ml-4"> 
               <img
                 className="w-40 h-40 object-cover rounded-full mb-2"
                 src={
