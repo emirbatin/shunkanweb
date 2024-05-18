@@ -1,4 +1,3 @@
-// components/Sidebar/Sidebar.jsx
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,10 +5,10 @@ import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Typography } from "@mui/material";
 import { useUser } from "../../context/UserContext";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { capitalizeFirstLetter } from "../../utils/stringUtils";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
@@ -59,7 +58,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-col items-start justify-start text-left w-60 h-[90vh] pl-5">
+    <div className={`flex flex-col lg:w-60 lg:h-[90vh] pl-5 lg:items-start lg:justify-start lg:text-left md:items-start md:justify-start md:text-left sm:items-center sm:justify-center sm:text-center ${isOpen ? 'sidebar-open' : 'sidebar'}`}>
       <div className="flex flex-row items-center justify-center box-border">
         <div className="flex flex-row items-center justify-center box-border">
           <img
@@ -76,7 +75,7 @@ const Sidebar = () => {
         </div>
       </div>
       <br />
-      <div className="flex-grow p-5">
+      <div className="flex-grow lg:p-2 lg:pt-5 md:p-2 md:pt-5 sm:p sm:pb-20">
         <ul>
           <li><Link className="route-link" to="/home">{t("home")}</Link></li>
           <br />

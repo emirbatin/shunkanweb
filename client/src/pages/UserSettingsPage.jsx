@@ -1,47 +1,74 @@
-import React from "react";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { jwtDecode} from "jwt-decode";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
 
 const UserSettingsPage = () => {
-    const { userId } = useParams();
-    const navigate = useNavigate();
-
-
-
+  const { userId } = useParams();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const userToken =
     sessionStorage.getItem("token") || localStorage.getItem("token");
 
+  const [userData, setUserData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
   useEffect(() => {
-    console.log("Token:", userToken);
     if (userToken) {
       const data = jwtDecode(userToken);
       fetchUserDetails(data.id);
     }
   }, [userToken]);
 
-  const fetchUserDetails = async (userId) => {
+  const fetchUserDetails = async (id) => {
     try {
-      const res = await fetch(`/api/users/${userId}`);
-      const userData = await res.json();
-      if (!res.ok) throw new Error(userData.error || "Bir hata oluştu");
-      console.log(userData);
+      const res = await fetch(`/api/users/${id}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Bir hata oluştu");
+      setUserData({ username: data.username, email: data.email, password: "" });
     } catch (error) {
       console.error("Kullanıcı bilgileri alınamadı:", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Güncelleme başarısız");
+      console.log("Kullanıcı bilgileri güncellendi:", data);
+      // Optionally, navigate to a different page or show a success message
+    } catch (error) {
+      console.error("Kullanıcı bilgileri güncellenemedi:", error);
     }
   };
 
   return (
     <div className="flex flex-row">
       <div className="flex">
-        <Sidebar></Sidebar>
+        <Sidebar />
       </div>
       <div className="flex flex-grow flex-col justify-start items-start text-start w-screen h-screen">
         <Typography variant="h4">{t("settings")}</Typography>
@@ -53,11 +80,11 @@ const UserSettingsPage = () => {
             style={{ backgroundColor: "var(--input-area-bg-color)" }}
             type="text"
             id="changeUsernameInput"
-            name="changeUsernameInput"
+            name="username"
             autoComplete="username"
             placeholder={t("username")}
-            value={null}
-            onChange={null}
+            value={userData.username}
+            onChange={handleChange}
           />
           <br />
           <Typography variant="h6">{t("email")}</Typography>
@@ -66,11 +93,11 @@ const UserSettingsPage = () => {
             style={{ backgroundColor: "var(--input-area-bg-color)" }}
             type="email"
             id="changeEmailInput"
-            name="changeEmailInput"
-            autoComplete="username"
+            name="email"
+            autoComplete="email"
             placeholder={t("email")}
-            value={null}
-            onChange={null}
+            value={userData.email}
+            onChange={handleChange}
           />
           <br />
           <Typography variant="h6">{t("password")}</Typography>
@@ -79,24 +106,23 @@ const UserSettingsPage = () => {
             style={{ backgroundColor: "var(--input-area-bg-color)" }}
             type="password"
             id="changePasswordInput"
-            name="changePasswordInput"
-            autoComplete="username"
+            name="password"
+            autoComplete="new-password"
             placeholder={t("password")}
-            value={null}
-            onChange={null}
+            value={userData.password}
+            onChange={handleChange}
           />
           <br />
           <Button
             style={{ marginTop: "2rem" }}
             className="w-20 h-10"
-            onClick={() => navigate(`/editprofile/${userId}`)}
+            onClick={handleSave}
             variant="contained"
             color="primary"
           >
             {t("save")}
           </Button>
         </div>
-        <input type="text" />
       </div>
     </div>
   );

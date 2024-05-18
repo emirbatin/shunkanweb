@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { jwtDecode } from "jwt-decode";
 import LottieAnimation from "../components/LootieAnimation/lootieAnimation.jsx";
 import LoadingLootie from "../assets/lottie/Manwithglassessittingonmonitorandlookingup.json";
 
@@ -21,6 +22,27 @@ const CourseContentPage = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
+
+  const userToken =
+    sessionStorage.getItem("token") || localStorage.getItem("token");
+
+  const fetchUserDetails = async (userId) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`);
+      const data = await response.json();
+      console.log("User Details:", data);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("Token:", userToken);
+    if (userToken) {
+      const data = jwtDecode(userToken);
+      fetchUserDetails(data.id);
+    }
+  }, [userToken]);
 
   const fetchCourse = useCallback(async (courseId) => {
     setLoadingCourse(true);
@@ -84,7 +106,10 @@ const CourseContentPage = () => {
     }
 
     if (userAnswer !== correctAnswer) {
-      setWrongAnswers((prev) => [...prev, { correctAnswer, userAnswer }]);
+      setWrongAnswers((prev) => [
+        ...prev,
+        { correctAns: correctAnswer, selectedAns: userAnswer },
+      ]);
       setShowFeedback(true);
       setIsAnswerCorrect(false);
     } else {
@@ -111,7 +136,10 @@ const CourseContentPage = () => {
     let correctAnswer = question?.options.find(
       (option) => option.label === question.correctAnswer
     )?.description;
-    setWrongAnswers((prev) => [...prev, { correctAnswer, userAnswer: null }]);
+    setWrongAnswers((prev) => [
+      ...prev,
+      { correctAns: correctAnswer, selectedAns: null },
+    ]);
 
     if (!isLastQuestion) {
       handleNextQuestion();
@@ -120,9 +148,29 @@ const CourseContentPage = () => {
     }
   }, [question, isLastQuestion, handleNextQuestion]);
 
-  const handleFinish = useCallback(() => {
+  const handleFinish = useCallback(async () => {
+    if (userToken) {
+      const data = jwtDecode(userToken);
+      const userId = data.id;
+      try {
+        const response = await fetch(`/api/users/${userId}/addWrongAnswers`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ wrongAnswers }),
+        });
+        if (response.ok) {
+          console.log("Answers saved successfully");
+        } else {
+          console.error("Failed to save answers");
+        }
+      } catch (error) {
+        console.error("Error saving answers:", error);
+      }
+    }
     navigate("/courses");
-  }, [navigate]);
+  }, [navigate, userToken, wrongAnswers]);
 
   const renderContent = (index) => {
     let mediaUrl = index === 0 ? question?.mediaUrl : tabContents[index];
@@ -211,15 +259,20 @@ const CourseContentPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Yanlış Cevap Verilerini Ekrana Yazdırılması */}
+
+      {/* 
       <Typography variant="h6">Yanlış Cevaplar:</Typography>
       {wrongAnswers.map((wrongAnswer, index) => (
         <Typography key={index} variant="body1">
-          Doğru Cevap: {wrongAnswer.correctAnswer}, Seçtiğiniz Cevap:{" "}
-          {wrongAnswer.userAnswer !== null
-            ? wrongAnswer.userAnswer
+          Doğru Cevap: {wrongAnswer.correctAns}, Seçtiğiniz Cevap:{" "}
+          {wrongAnswer.selectedAns !== null
+            ? wrongAnswer.selectedAns
             : "Boş Geçildi"}
         </Typography>
       ))}
+      */}
 
       <div className="flex flex-row fixed bottom-8 left-0 right-0 w-full px-40">
         <div className="flex w-full">
@@ -227,7 +280,7 @@ const CourseContentPage = () => {
             {!isAnswerCorrect && (
               <Typography variant="body1" color="error">
                 Cevap yanlış, doğru cevap:{" "}
-                {wrongAnswers[wrongAnswers.length - 1]?.correctAnswer}
+                {wrongAnswers[wrongAnswers.length - 1]?.correctAns}
               </Typography>
             )}
             {!showFeedback &&

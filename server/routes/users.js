@@ -8,6 +8,7 @@ const {
     getUserById,
     getAllUsers,
     updateUser,
+    addWrongAnswers,
     deleteUser
 } = require("../controllers/userController");
 
@@ -22,7 +23,7 @@ router.post('/login', userController.loginUser);
 
 router.get("/secret", authenticateToken, (req, res) => {
     res.send("Gizli bilgi, sadece doğrulanmış kullanıcılar görebilir.");
-  });
+});
 
 // Kullanıcı register route'u
 router.post('/register', userController.createUser);
@@ -36,13 +37,13 @@ router.get("/:id", getUserById);
 //Post a new user
 router.post("/", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), createUser);
 
-//Delete a user
-router.delete("/:id", deleteUser);
-
 //Update a user
 router.patch("/:id", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'banner', maxCount: 1 }]), updateUser);
 
+//Add wrong answers to a user
+router.patch("/:id/addWrongAnswers", addWrongAnswers);
+
+//Delete a user
+router.delete("/:id", deleteUser);
+
 module.exports = router;
-
-
-

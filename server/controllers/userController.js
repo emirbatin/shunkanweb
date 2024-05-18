@@ -68,7 +68,6 @@ exports.createUser = async (req, res) => {
   }
 };
 
-
 //Login User
 
 exports.loginUser = async (req, res) => {
@@ -151,7 +150,9 @@ exports.updateUser = async (req, res) => {
 
     // Profile Image Update
     if (req.files && req.files.image) {
-      const oldImagePath = user.imagePath ? path.join(__dirname, "..", user.imagePath) : null;
+      const oldImagePath = user.imagePath
+        ? path.join(__dirname, "..", user.imagePath)
+        : null;
       if (oldImagePath && fs.existsSync(oldImagePath)) {
         fs.unlinkSync(oldImagePath);
       }
@@ -163,14 +164,18 @@ exports.updateUser = async (req, res) => {
 
     // Banner Image Update
     if (req.files && req.files.banner) {
-      const oldBannerPath = user.bannerPath ? path.join(__dirname, "..", user.bannerPath) : null;
+      const oldBannerPath = user.bannerPath
+        ? path.join(__dirname, "..", user.bannerPath)
+        : null;
       if (oldBannerPath && fs.existsSync(oldBannerPath)) {
         fs.unlinkSync(oldBannerPath);
       }
       const uploadDir = "uploads";
       const bannerFileName = path.basename(req.files.banner[0].path);
       user.bannerPath = `${uploadDir}/${bannerFileName}`;
-      user.bannerUrl = `${req.protocol}://${req.get("host")}/${user.bannerPath}`;
+      user.bannerUrl = `${req.protocol}://${req.get("host")}/${
+        user.bannerPath
+      }`;
     }
 
     // Password Update
@@ -182,6 +187,11 @@ exports.updateUser = async (req, res) => {
     Object.keys(updates).forEach((update) => {
       if (update !== "password") user[update] = updates[update];
     });
+
+    // wrongAnswers Update
+    if (updates.wrongAnswers) {
+      user.wrongAnswers = updates.wrongAnswers;
+    }
 
     await user.save();
     res.status(200).json(user);
@@ -202,5 +212,27 @@ exports.deleteUser = async (req, res) => {
     res.send({ user, message: "User deleted successfully" });
   } catch (error) {
     res.status(500).send(error);
+  }
+};
+
+// Yanlış cevapların verilerini toplama
+
+exports.addWrongAnswers = async (req, res) => {
+  const { id } = req.params;
+  const { wrongAnswers } = req.body;
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Use $push to add new wrong answers to the array
+    user.wrongAnswers.push(...wrongAnswers);
+
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
 };

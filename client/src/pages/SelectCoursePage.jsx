@@ -3,18 +3,21 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import CourseDetails from "../components/Courses/CourseDetails.jsx";
-
 import { useCoursesContext } from "../hooks/useCoursesContext.jsx";
-import { jwtDecode } from "jwt-decode"; // Doğru import şekli
+import { jwtDecode } from "jwt-decode";
 import { Typography } from "@mui/material";
 import { capitalizeFirstLetter } from "../utils/stringUtils";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import LottieAnimation from "../components/LootieAnimation/lootieAnimation.jsx";
+import LoadingLootie from "../assets/lottie/Manwithglassessittingonmonitorandlookingup.json";
 
 const SelectCoursePage = () => {
   const userToken =
     sessionStorage.getItem("token") || localStorage.getItem("token");
-  const [username, setUsername] = useState(""); 
+  const [username, setUsername] = useState("");
   const [userPerm, setUserPerm] = useState("");
   const [userId, setUserId] = useState("");
   const [userProfilePicture, setUserProfilePicture] = useState("");
@@ -81,12 +84,9 @@ const SelectCoursePage = () => {
   return (
     <div className="flex flex-col md:flex-row h-full">
       {/* Sidebar Toggle Button for Small Screens */}
-      <div className="md:hidden flex justify-start p-2">
-        <Button
-          variant="text"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+      <div className="md:hidden flex justify-center p-2">
+        <Button variant="text" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {sidebarOpen ? <CloseIcon /> : <MenuIcon />}
         </Button>
       </div>
 
@@ -96,21 +96,27 @@ const SelectCoursePage = () => {
           sidebarOpen ? "block" : "hidden"
         }`}
       >
-        <Sidebar />
+        <Sidebar isOpen={sidebarOpen} />
       </div>
 
       {/* Right Container */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-5 flex-grow">
-        {loading ? (
-          <Typography variant="h6">{t('loading')}</Typography>
-        ) : (
-          courses &&
-          [...courses].reverse().map((course) => (
-            <div key={course._id} className="w-full p-2">
-              <CourseDetails course={course} />
+      <div className="flex-grow p-5 overflow-y-auto scrollbar-hide">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 max-h-screen overflow-y-auto scrollbar-hide">
+          {loading ? (
+            <div className="flex flex-col text-center items-center justify-center h-screen w-auto">
+              <div className="flex w-80 h-auto pb-40">
+                <LottieAnimation animationData={LoadingLootie} />
+              </div>
             </div>
-          ))
-        )}
+          ) : (
+            courses &&
+            [...courses].reverse().map((course) => (
+              <div key={course._id} className="w-full p-2">
+                <CourseDetails course={course} />
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
