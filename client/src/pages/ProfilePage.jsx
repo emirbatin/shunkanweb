@@ -9,6 +9,8 @@ import FlameImage from "../assets/illustrations/flame.png";
 import BadgeImage from "../assets/illustrations/badge.png";
 import { useUser } from "../context/UserContext";
 import { capitalizeFirstLetter } from "../utils/stringUtils";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ProfilePage = () => {
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
@@ -32,6 +34,7 @@ const ProfilePage = () => {
   const [editMode, setEditMode] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState(null);
   const [bannerImageFile, setBannerImageFile] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (userToken) {
@@ -110,7 +113,25 @@ const ProfilePage = () => {
 
   return (
     <div className="flex w-auto h-full justify-start items-start flex-row">
-      <Sidebar />
+      {/* Sidebar Toggle Button for Small Screens */}
+      <div className="md:hidden flex justify-center p-2">
+        <Button
+          variant="text"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
+          {sidebarOpen ? <CloseIcon /> : <MenuIcon />}
+        </Button>
+      </div>
+
+      {/* Left Sidebar Container */}
+      <div
+        className={`md:block transition-transform duration-300 ${
+          sidebarOpen ? "block" : "hidden"
+        }`}
+      >
+        <Sidebar isOpen={sidebarOpen} />
+      </div>
+
 
       <div className="flex flex-col h-full w-full px-5">
         <div className="flex flex-grow flex-row items-center">

@@ -40,14 +40,12 @@ const userSchema = new Schema(
       required: true,
     },
     imagePath: {
-      // Yüklenen resmin dosya yolunu saklamak için yeni alan
       type: String,
-      required: false, // Resim yükleme opsiyonel olduğu için bu alan zorunlu olmayabilir
+      required: false,
     },
     bannerPath: {
-      // Yüklenen resmin dosya yolunu saklamak için yeni alan
       type: String,
-      required: false, // Resim yükleme opsiyonel olduğu için bu alan zorunlu olmayabilir
+      required: false,
     },
     emailConfirmed: {
       type: Boolean,
@@ -79,6 +77,12 @@ const userSchema = new Schema(
       type: Date,
       required: false,
     },
+    wrongAnswers: [
+      {
+        correctAns: { type: String, required: false },
+        selectedAns: { type: String, required: false },
+      },
+    ],
   },
   {
     timestamps: true,
