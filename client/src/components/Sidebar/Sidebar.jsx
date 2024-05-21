@@ -77,13 +77,20 @@ const Sidebar = ({ isOpen }) => {
       <br />
       <div className="flex-grow lg:p-2 lg:pt-5 md:p-2 md:pt-5 sm:p sm:pb-20">
         <ul>
-          <li><Link className="route-link" to="/home">{t("home")}</Link></li>
-          <br />
           <li><Link className="route-link" to="/courses">{t("courses")}</Link></li>
           <br />
           <li><Link className="route-link" to={`/profile/${userId}`}>{t("profile")}</Link></li>
           <br />
           <li><Link className="route-link" to={`/settings/${userId}`}>{t("settings")}</Link></li>
+          <br />
+          <li><Link className="route-link" to={`/shuwa/`}>{t("AI (Beta)")}</Link></li>
+          <br />
+          {userPerm === 'admin' && (
+            <>
+              <li><Link className="route-link" to="/admin">{t("dashboard")}</Link></li>
+              <br />
+            </>
+          )}
         </ul>
       </div>
       <div className="sidebar-logout">

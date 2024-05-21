@@ -19,12 +19,13 @@ const CourseContentPage = () => {
   const [tabContents, setTabContents] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [totalPoints, setTotalPoints] = useState(0); 
   const [showFeedback, setShowFeedback] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
+  const [finishTriggered, setFinishTriggered] = useState(false); // Yeni state
 
-  const userToken =
-    sessionStorage.getItem("token") || localStorage.getItem("token");
+  const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
 
   const fetchUserDetails = async (userId) => {
     try {
@@ -59,11 +60,12 @@ const CourseContentPage = () => {
   }, []);
 
   const fetchQuestion = useCallback(async (questionId, index) => {
+    console.log("API URL:", process.env.REACT_APP_API_URL);
     setLoadingQuestion(true);
     try {
       const response = await fetch(`/api/questions/${questionId}`);
       const data = await response.json();
-      const mediaUrl = `http://localhost:4000/${data.mediaPath}`;
+      const mediaUrl = `${process.env.REACT_APP_API_URL}/${data.mediaPath}`;
       setQuestion({ ...data, mediaUrl });
       setTabContents((prevTabContents) => {
         const updatedTabContents = [...prevTabContents];
@@ -115,13 +117,21 @@ const CourseContentPage = () => {
     } else {
       setIsAnswerCorrect(true);
       setShowFeedback(false);
+      setTotalPoints((prevPoints) => prevPoints + question.points); // Increment total points
+
       if (isLastQuestion) {
-        handleFinish();
+        setFinishTriggered(true); // Finish işlemi tetiklendi
       } else {
         handleNextQuestion();
       }
     }
   }, [selectedOption, question, isLastQuestion]);
+
+  useEffect(() => {
+    if (finishTriggered) {
+      handleFinish();
+    }
+  }, [finishTriggered, totalPoints]); // finishTriggered veya totalPoints değiştiğinde handleFinish fonksiyonunu çağır
 
   const handleNextQuestion = useCallback(() => {
     if (!isLastQuestion) {
@@ -144,7 +154,7 @@ const CourseContentPage = () => {
     if (!isLastQuestion) {
       handleNextQuestion();
     } else {
-      handleFinish();
+      setFinishTriggered(true); // Finish işlemi tetiklendi
     }
   }, [question, isLastQuestion, handleNextQuestion]);
 
@@ -153,6 +163,7 @@ const CourseContentPage = () => {
       const data = jwtDecode(userToken);
       const userId = data.id;
       try {
+        // Yanlış cevapları kaydet
         const response = await fetch(`/api/users/${userId}/addWrongAnswers`, {
           method: "PATCH",
           headers: {
@@ -165,12 +176,26 @@ const CourseContentPage = () => {
         } else {
           console.error("Failed to save answers");
         }
+
+        // Kullanıcı puanlarını güncelle
+        const pointsResponse = await fetch(`/api/users/${userId}/addCoursePoints`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ points: totalPoints }),
+        });
+        if (pointsResponse.ok) {
+          console.log("Points added successfully");
+        } else {
+          console.error("Failed to add points");
+        }
       } catch (error) {
-        console.error("Error saving answers:", error);
+        console.error("Error saving answers or adding points:", error);
       }
     }
     navigate("/courses");
-  }, [navigate, userToken, wrongAnswers]);
+  }, [navigate, userToken, wrongAnswers, totalPoints]);
 
   const renderContent = (index) => {
     let mediaUrl = index === 0 ? question?.mediaUrl : tabContents[index];
@@ -256,6 +281,10 @@ const CourseContentPage = () => {
                 <Typography variant="h1">No answers available.</Typography>
               )}
             </div>
+            {/* Display total points */}
+            <Typography variant="h6" style={{ marginTop: "20px" }}>
+              Toplam Puan: {totalPoints}
+            </Typography>
           </div>
         </div>
       </div>
@@ -303,7 +332,7 @@ const CourseContentPage = () => {
               onClick={
                 showFeedback
                   ? isLastQuestion
-                    ? handleFinish
+                    ? () => setFinishTriggered(true)
                     : handleNextQuestion
                   : handleCheckAnswer
               }

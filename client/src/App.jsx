@@ -11,6 +11,9 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
 import UserSettingsPage from "./pages/UserSettingsPage.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
+import ShuwaPage from "./pages/ShuwaPage.jsx";
+
 
 function App() {
   return (
@@ -27,6 +30,8 @@ function App() {
           <Route path="/courses" element={<SelectCoursePage />} />
           <Route path="/course/:courseId" element={<CourseContentPage />} />
           <Route path="/settings/:userId" element={<UserSettingsPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/shuwa" element={<ShuwaPage />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </div>

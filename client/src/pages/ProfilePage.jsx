@@ -49,6 +49,7 @@ const ProfilePage = () => {
       const res = await fetch(`/api/users/${userId}`);
       const userData = await res.json();
       if (!res.ok) throw new Error(userData.error || "Bir hata oluştu");
+      setUserId(userData._id);
       setUsername(userData.username);
       setUserProfilePicture(userData.imageUrl);
       setSidebarProfilePicture(userData.imageUrl);

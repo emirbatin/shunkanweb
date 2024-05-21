@@ -224,6 +224,10 @@ body {
   color: var(--text-third-color);
 }
 
+.MuiTypography-subtitle3 {
+  color: var(--text-color);
+}
+
 .MuiTypography-body1 {
   color: var(--text-color);
 }
