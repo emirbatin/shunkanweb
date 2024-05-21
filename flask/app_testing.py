@@ -23,10 +23,12 @@ model = load_model(model_file_path)
 mp_holistic = mp.solutions.holistic
 executor = ThreadPoolExecutor(max_workers=2)
 
+client_connected = False
+
 def process_frame(frame, holistic, model, sequence, sentence, predictions, threshold):
     res = None  # Initialize res to ensure it's defined
     image, results = mediapipe_detection(frame, holistic)
-    #draw_landmarks(image, results) #landmarklar kapalı
+    #draw_landmarks(image, results) landmarklar kapalı
 
     if results.left_hand_landmarks or results.right_hand_landmarks:
         keypoints = extract_keypoints(results)
@@ -71,7 +73,7 @@ def gen_frames():
         frame_rate = 15
         prev = 0
 
-        while cap.isOpened():
+        while cap.isOpened() and client_connected:
             time_elapsed = time.time() - prev
 
             if time_elapsed > 1.0 / frame_rate:
@@ -95,10 +97,14 @@ def index():
 
 @socketio.on('connect')
 def connect():
+    global client_connected
+    client_connected = True
     print('Client connected')
 
 @socketio.on('disconnect')
 def disconnect():
+    global client_connected
+    client_connected = False
     print('Client disconnected')
 
 @app.route('/video_feed')

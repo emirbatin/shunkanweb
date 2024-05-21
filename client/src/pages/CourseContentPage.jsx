@@ -60,11 +60,12 @@ const CourseContentPage = () => {
   }, []);
 
   const fetchQuestion = useCallback(async (questionId, index) => {
+    console.log("API URL:", process.env.REACT_APP_API_URL);
     setLoadingQuestion(true);
     try {
       const response = await fetch(`/api/questions/${questionId}`);
       const data = await response.json();
-      const mediaUrl = `http://localhost:4000/${data.mediaPath}`;
+      const mediaUrl = `${process.env.REACT_APP_API_URL}/${data.mediaPath}`;
       setQuestion({ ...data, mediaUrl });
       setTabContents((prevTabContents) => {
         const updatedTabContents = [...prevTabContents];
