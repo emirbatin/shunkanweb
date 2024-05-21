@@ -43,7 +43,12 @@ router.patch("/:id", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'ban
 //Add wrong answers to a user
 router.patch("/:id/addWrongAnswers", addWrongAnswers);
 
+// Kullanıcıya kurs puanları ekleme
+router.patch("/:id/addCoursePoints", userController.addCoursePoints);
+
 //Delete a user
 router.delete("/:id", deleteUser);
+
+
 
 module.exports = router;

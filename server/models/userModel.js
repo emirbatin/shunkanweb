@@ -77,6 +77,11 @@ const userSchema = new Schema(
       type: Date,
       required: false,
     },
+    totalPoint: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
     wrongAnswers: [
       {
         correctAns: { type: String, required: false },

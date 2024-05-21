@@ -16,7 +16,7 @@ const StatisticCards = ({ CardTitle, UserStatisticData, cardIconType, CardImageS
         </div>
         <div className="flex flex-col mx-4 text-left justify-center items-left">
           <Typography variant="h6">{CardTitle}</Typography>
-          <Typography variant="subtitle">{UserStatisticData}</Typography>
+          <Typography variant="subtitle1">{UserStatisticData}</Typography>
         </div>
       </div>
     </div>

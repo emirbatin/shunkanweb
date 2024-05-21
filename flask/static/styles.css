@@ -1,0 +1,88 @@
+/* CSS ile görüntüyü boyutlandırma */
+@font-face {
+    font-family: 'Natsuzemi Maru';
+    font-style: normal;
+    src: local('Natsuzemi Maru'), url('./font/NatsuzemiMaruGothicBlack.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Natsuzemi Maru', sans-serif;
+}
+
+#Appbar{
+    color: white;
+    padding: 10px;
+    padding-inline: 20px;
+    text-align: center;
+    display: flex;
+}
+
+#section-page{
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    padding: 20px;
+
+}
+
+#sentence{
+    color: #FF477E;
+    font-size: 36px;
+}
+
+#video_feed {
+    max-width: 500px; /* Görüntü maksimum genişliğe sahip olacak */
+    height: 500px; /* Yükseklik otomatik olarak boyutlandırılacak */
+    display: block; /* İçeriği boşluklarla çevreler */
+    margin: 0 auto; /* Görüntüyü yatayda ortalar */
+    border-radius: 30px;
+    padding: 20px;
+    object-fit: cover;
+}
+
+#sentence {
+    height: auto; /* Yükseklik otomatik olarak boyutlandırılacak */
+    display: block; /* İçeriği boşluklarla çevreler */
+    margin: 0 auto; /* Görüntüyü yatayda ortalar */
+    text-align: center; /* Metni yatayda ortalar */
+    font-size: 36px;
+}
+.sign-in-button{
+    color: #FF477E;
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    font-size: 24px;
+
+}
+
+.sign-in-button:hover{
+    color: #ff92b3;
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    font-size: 24px;
+}
+
+.sign-in-button:active{
+    color: #ffbdd1;
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    font-size: 24px;
+}
+
+
+.page-title {
+    color: #FF477E;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    font-size: 36px;
+}
+
+

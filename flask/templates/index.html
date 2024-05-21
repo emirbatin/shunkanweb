@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shunkan Web</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="../static/styles.css">
+
+
+</head>
+<body>
+
+    <div id = "Appbar">
+
+        <img class="menu-icon" width="32" height="32" src="https://img.icons8.com/plumpy/48/thumbnail-view.png" alt="thumbnail-view"/>
+        <h1 class="page-title">Shunkan</h1>
+        <button class="sign-in-button">Sign in</button>
+
+    </div>
+
+    <div id="section-page">
+        
+        <img id="video_feed" src="{{ url_for('video_feed') }}" alt="Video Stream">
+        <div id="sentence">Test</div>
+
+    </div>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+        <script src="{{ url_for('static', filename='script.js') }}"></script>    
+        <script src="../static/script.js"></script>    
+    </div>
+</body>
+</html>
