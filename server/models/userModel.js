@@ -88,6 +88,11 @@ const userSchema = new Schema(
         selectedAns: { type: String, required: false },
       },
     ],
+    banned: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   {
     timestamps: true,

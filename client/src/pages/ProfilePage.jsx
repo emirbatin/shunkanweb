@@ -1,8 +1,7 @@
-// pages/ProfilePage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Doğru kullanım bu şekildedir
 import Sidebar from "../components/Sidebar/Sidebar";
 import StatisticCards from "../components/StatisticCard/StatisticCards";
 import FlameImage from "../assets/illustrations/flame.png";
@@ -11,6 +10,7 @@ import { useUser } from "../context/UserContext";
 import { capitalizeFirstLetter } from "../utils/stringUtils";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { fetchUserDetails, updateUserDetails } from "../api"; // API çağrılarını içe aktarın
 
 const ProfilePage = () => {
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
@@ -40,15 +40,13 @@ const ProfilePage = () => {
     if (userToken) {
       const data = jwtDecode(userToken);
       setUserId(data.id);
-      fetchUserDetails(data.id);
+      getUserDetails(data.id);
     }
   }, [userToken]);
 
-  const fetchUserDetails = async (userId) => {
+  const getUserDetails = async (userId) => {
     try {
-      const res = await fetch(`/api/users/${userId}`);
-      const userData = await res.json();
-      if (!res.ok) throw new Error(userData.error || "Bir hata oluştu");
+      const userData = await fetchUserDetails(userId);
       setUserId(userData._id);
       setUsername(userData.username);
       setUserProfilePicture(userData.imageUrl);
@@ -73,16 +71,11 @@ const ProfilePage = () => {
       formData.append("role", userPerm);
 
       try {
-        const res = await fetch(`/api/users/${userId}`, {
-          method: "PATCH",
-          body: formData,
-        });
-        if (!res.ok) throw new Error("Failed to update user");
-        const updatedUser = await res.json();
+        const updatedUser = await updateUserDetails(userId, formData);
         setUserProfilePicture(updatedUser.imageUrl);
         setSidebarProfilePicture(updatedUser.imageUrl);
         setUserBannerPicture(updatedUser.bannerUrl);
-        fetchUserDetails(userId);
+        getUserDetails(userId);
       } catch (error) {
         console.error("Error updating user:", error);
       }
@@ -132,7 +125,6 @@ const ProfilePage = () => {
       >
         <Sidebar isOpen={sidebarOpen} />
       </div>
-
 
       <div className="flex flex-col h-full w-full px-5">
         <div className="flex flex-grow flex-row items-center">

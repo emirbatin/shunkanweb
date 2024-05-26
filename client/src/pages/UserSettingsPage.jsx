@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Doğru kullanım bu şekildedir
 import Sidebar from "../components/Sidebar/Sidebar";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import Button from "@mui/material/Button";
+import { fetchUserDetails, updateUserDetails } from "../api"; // API çağrılarını içe aktarın
 
 const UserSettingsPage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const userToken =
-    sessionStorage.getItem("token") || localStorage.getItem("token");
+  const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
 
   const [userData, setUserData] = useState({
     username: "",
@@ -20,18 +20,17 @@ const UserSettingsPage = () => {
     password: "",
   });
 
+
   useEffect(() => {
     if (userToken) {
       const data = jwtDecode(userToken);
-      fetchUserDetails(data.id);
+      getUserDetails(data.id);
     }
   }, [userToken]);
 
-  const fetchUserDetails = async (id) => {
+  const getUserDetails = async (id) => {
     try {
-      const res = await fetch(`/api/users/${id}`);
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Bir hata oluştu");
+      const data = await fetchUserDetails(id);
       setUserData({ username: data.username, email: data.email, password: "" });
     } catch (error) {
       console.error("Kullanıcı bilgileri alınamadı:", error);
@@ -46,18 +45,24 @@ const UserSettingsPage = () => {
     }));
   };
 
-  const handleSave = async () => {
-    try {
-      const res = await fetch(`/api/users/${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+  const handleProfileImageChange = (e) => {
+    setProfileImageFile(e.target.files[0]);
+  };
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Güncelleme başarısız");
+  const handleBannerImageChange = (e) => {
+    setBannerImageFile(e.target.files[0]);
+  };
+
+  const handleSave = async () => {
+    const formData = new FormData();
+    if (profileImageFile) formData.append("image", profileImageFile);
+    if (bannerImageFile) formData.append("banner", bannerImageFile);
+    formData.append("username", userData.username);
+    formData.append("email", userData.email);
+    if (userData.password) formData.append("password", userData.password);
+
+    try {
+      const data = await updateUserDetails(userId, formData);
       console.log("Kullanıcı bilgileri güncellendi:", data);
       // Optionally, navigate to a different page or show a success message
     } catch (error) {

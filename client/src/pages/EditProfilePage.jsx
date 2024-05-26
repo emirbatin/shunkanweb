@@ -1,13 +1,12 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Doğru kullanım bu şekildedir
 import { capitalizeFirstLetter } from "../utils/stringUtils";
-
+import { fetchUserDetails, updateUserDetails } from "../api"; // API çağrılarını içe aktarın
 
 const EditProfilePage = () => {
-  const userToken =
-    sessionStorage.getItem("token") || localStorage.getItem("token");
+  const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
   const { userId } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -21,15 +20,13 @@ const EditProfilePage = () => {
     console.log("Token:", userToken);
     if (userToken) {
       const data = jwtDecode(userToken);
-      fetchUserDetails(data.id);
+      getUserDetails(data.id);
     }
   }, [userToken]);
 
-  const fetchUserDetails = async (userId) => {
+  const getUserDetails = async (userId) => {
     try {
-      const res = await fetch(`/api/users/${userId}`);
-      const userData = await res.json();
-      if (!res.ok) throw new Error(userData.error || "Bir hata oluştu");
+      const userData = await fetchUserDetails(userId);
       setUsername(userData.username);
       setUserProfilePicture(userData.imageUrl);
       setUserPerm(userData.role);
@@ -39,30 +36,22 @@ const EditProfilePage = () => {
     }
   };
 
-  //patch request
-
   const handleEditProfile = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
-    const response = await fetch(`/api/users/${userId}`, {
-      method: "PATCH",
-        body: data,
-    });
-    const result = await response.json();
-    console.log(result);
-  }
+    try {
+      const result = await updateUserDetails(userId, data);
+      console.log(result);
+    } catch (error) {
+      console.error("Kullanıcı bilgileri güncellenemedi:", error);
+    }
+  };
 
   useEffect(() => {
-    fetch(`/api/users/${userId}`)
-      .then((response) => response.json())
-      .then((data) => setUser(data))
-      .catch((error) => {
-        console.error("Error fetching user details:", error);
-        navigate("/login");
-      });
-  }, [userId, navigate]);
+    getUserDetails(userId);
+  }, [userId]);
 
-  if (!user) return <div>Loading...</div>;
+  if (!username) return <div>Loading...</div>;
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -74,6 +63,28 @@ const EditProfilePage = () => {
         }
         alt="user"
       />
+      <form onSubmit={handleEditProfile}>
+        <div>
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="profilePicture">Profile Picture:</label>
+          <input
+            type="file"
+            id="profilePicture"
+            name="profilePicture"
+            onChange={(e) => setUserProfilePicture(URL.createObjectURL(e.target.files[0]))}
+          />
+        </div>
+        <button type="submit">Save</button>
+      </form>
     </div>
   );
 };

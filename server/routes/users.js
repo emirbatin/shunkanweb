@@ -29,7 +29,14 @@ router.get("/secret", authenticateToken, (req, res) => {
 router.post('/register', userController.createUser);
 
 //GET All Users
-router.get("/", getAllUsers);
+router.get('/', async (req, res) => {
+    try {
+      const users = await User.find({});
+      res.json(users);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
 
 // GET a single user
 router.get("/:id", getUserById); 
@@ -49,6 +56,19 @@ router.patch("/:id/addCoursePoints", userController.addCoursePoints);
 //Delete a user
 router.delete("/:id", deleteUser);
 
-
+// Ban a user
+router.patch("/:id/ban", async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) return res.status(404).json({ message: "User not found" });
+  
+      user.banned = !user.banned;
+      await user.save();
+  
+      res.json({ message: `User ${user.banned ? 'banned' : 'unbanned'}`, user });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
 
 module.exports = router;

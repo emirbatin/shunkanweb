@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const courseRoutes = require("./routes/courses");
 const userRoutes = require("./routes/users");
 const questionRoutes = require("./routes/questions");
-
+const authRoutes = require('./routes/auth');
+const statsRoutes = require('./routes/stats');
 const app = express();
 
 app.use(express.json());
@@ -18,6 +19,8 @@ app.use('/uploads', express.static('uploads'));
 app.use("/api/courses", courseRoutes);
 app.use("/api/users", userRoutes);
 app.use('/api/questions', questionRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/stats', statsRoutes);
 
 //Connect to MongoDB
 mongoose

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
 import { Button, Typography } from "@mui/material";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { useTranslation } from "react-i18next";
-
-const socket = io(`${process.env.REACT_APP_FLASK_URL}`, {
-  transports: ["websocket", "polling"],
-  withCredentials: true,
-  autoConnect: false, // Prevent auto-connection
-});
+import {
+  connectSocket,
+  disconnectSocket,
+  onSocketConnect,
+  onSocketDisconnect,
+  onSentenceUpdate,
+  offSocketConnect,
+  offSocketDisconnect,
+  offSentenceUpdate,
+  getVideoFeedUrl,
+} from "../api";
 
 const ShuwaPage = () => {
   const { t } = useTranslation();
@@ -40,13 +44,13 @@ const ShuwaPage = () => {
         setIsConnected(false); // Disconnect client when time is up
       }, 10000); // 10 saniye
 
-      socket.connect();
+      connectSocket();
 
-      socket.on("connect", () => {
+      onSocketConnect(() => {
         console.log("Connected to server");
       });
 
-      socket.on("sentence_update", (data) => {
+      onSentenceUpdate((data) => {
         setSentence(data.sentence);
         if (data.sentence === targetWord) {
           setCorrectSignDetected(true);
@@ -57,11 +61,11 @@ const ShuwaPage = () => {
         }
       });
 
-      socket.on("disconnect", () => {
+      onSocketDisconnect(() => {
         console.log("Disconnected from server");
       });
     } else {
-      socket.disconnect();
+      disconnectSocket();
       setTimeLeft(10);
       setSentence("");
       setCorrectSignDetected(false);
@@ -71,10 +75,10 @@ const ShuwaPage = () => {
     return () => {
       clearInterval(timer);
       clearTimeout(timeout);
-      socket.off("connect");
-      socket.off("sentence_update");
-      socket.off("disconnect");
-      socket.disconnect(); // Ensure the socket disconnects when the component unmounts
+      offSocketConnect();
+      offSentenceUpdate();
+      offSocketDisconnect();
+      disconnectSocket(); // Ensure the socket disconnects when the component unmounts
     };
   }, [isConnected, targetWord]);
 
@@ -97,11 +101,7 @@ const ShuwaPage = () => {
           <img
             className="flex w-80 h-80 object-cover"
             id="video_feed"
-            src={
-              isConnected
-                ? `${process.env.REACT_APP_FLASK_URL}/video_feed`
-                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-            }
+            src={getVideoFeedUrl(isConnected)}
             alt="Video Stream"
           />
         </div>
@@ -117,11 +117,7 @@ const ShuwaPage = () => {
       <div className="flex flex-row fixed bottom-8 left-0 right-0 w-full px-40 pl-80">
         <div className="flex w-full">
           <div className="flex flex-grow justify-start">
-            {feedback && (
-              <Typography variant="h6">
-                {feedback}
-              </Typography>
-            )}
+            {feedback && <Typography variant="h6">{feedback}</Typography>}
           </div>
           <div className="flex flex-grow justify-end">
             <Button

@@ -2,9 +2,16 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Doğru kullanım bu şekildedir
 import LottieAnimation from "../components/LootieAnimation/lootieAnimation.jsx";
 import LoadingLootie from "../assets/lottie/Manwithglassessittingonmonitorandlookingup.json";
+import {
+  fetchUserDetails,
+  fetchCourseDetails,
+  fetchQuestionDetails,
+  saveWrongAnswers,
+  addCoursePoints
+} from "../api"; // API fonksiyonlarını içe aktarın
 
 const CourseContentPage = () => {
   const { t } = useTranslation();
@@ -27,31 +34,22 @@ const CourseContentPage = () => {
 
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
 
-  const fetchUserDetails = async (userId) => {
-    try {
-      const response = await fetch(`/api/users/${userId}`);
-      const data = await response.json();
-      console.log("User Details:", data);
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-    }
-  };
-
   useEffect(() => {
     console.log("Token:", userToken);
     if (userToken) {
       const data = jwtDecode(userToken);
-      fetchUserDetails(data.id);
+      fetchUserDetails(data.id)
+        .then(userData => console.log("User Details:", userData))
+        .catch(error => console.error("Error fetching user details:", error));
     }
   }, [userToken]);
 
   const fetchCourse = useCallback(async (courseId) => {
     setLoadingCourse(true);
     try {
-      const response = await fetch(`/api/courses/${courseId}`);
-      const data = await response.json();
-      setCourse(data);
-      setTabContents(data.questions.map((_, index) => `İçerik ${index + 1}`));
+      const courseData = await fetchCourseDetails(courseId);
+      setCourse(courseData);
+      setTabContents(courseData.questions.map((_, index) => `İçerik ${index + 1}`));
     } catch (error) {
       console.error("Error fetching course details:", error);
     } finally {
@@ -63,10 +61,9 @@ const CourseContentPage = () => {
     console.log("API URL:", process.env.REACT_APP_API_URL);
     setLoadingQuestion(true);
     try {
-      const response = await fetch(`/api/questions/${questionId}`);
-      const data = await response.json();
-      const mediaUrl = `${process.env.REACT_APP_API_URL}/${data.mediaPath}`;
-      setQuestion({ ...data, mediaUrl });
+      const questionData = await fetchQuestionDetails(questionId);
+      const mediaUrl = `${process.env.REACT_APP_API_URL}/${questionData.mediaPath}`;
+      setQuestion({ ...questionData, mediaUrl });
       setTabContents((prevTabContents) => {
         const updatedTabContents = [...prevTabContents];
         updatedTabContents[index] = mediaUrl;
@@ -164,32 +161,12 @@ const CourseContentPage = () => {
       const userId = data.id;
       try {
         // Yanlış cevapları kaydet
-        const response = await fetch(`/api/users/${userId}/addWrongAnswers`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ wrongAnswers }),
-        });
-        if (response.ok) {
-          console.log("Answers saved successfully");
-        } else {
-          console.error("Failed to save answers");
-        }
+        await saveWrongAnswers(userId, wrongAnswers);
+        console.log("Answers saved successfully");
 
         // Kullanıcı puanlarını güncelle
-        const pointsResponse = await fetch(`/api/users/${userId}/addCoursePoints`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ points: totalPoints }),
-        });
-        if (pointsResponse.ok) {
-          console.log("Points added successfully");
-        } else {
-          console.error("Failed to add points");
-        }
+        await addCoursePoints(userId, totalPoints);
+        console.log("Points added successfully");
       } catch (error) {
         console.error("Error saving answers or adding points:", error);
       }
