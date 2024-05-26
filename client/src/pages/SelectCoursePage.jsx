@@ -7,12 +7,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import CourseDetails from "../components/Courses/CourseDetails.jsx";
 import { useCoursesContext } from "../hooks/useCoursesContext.jsx";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Doğru kullanım bu şekildedir
 import { Typography } from "@mui/material";
 import { capitalizeFirstLetter } from "../utils/stringUtils";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import LottieAnimation from "../components/LootieAnimation/lootieAnimation.jsx";
 import LoadingLootie from "../assets/lottie/Manwithglassessittingonmonitorandlookingup.json";
+import { fetchUserDetails, fetchAllCourses } from "../api"; // API çağrılarını içe aktarın
 
 const SelectCoursePage = () => {
   const userToken =
@@ -30,19 +31,13 @@ const SelectCoursePage = () => {
     if (userToken) {
       const data = jwtDecode(userToken);
       setUserId(data.id);
-      fetchUserDetails(data.id);
+      getUserDetails(data.id);
     }
   }, [userToken]);
 
-  const fetchUserDetails = async (userId) => {
+  const getUserDetails = async (userId) => {
     try {
-      const res = await fetch(`/api/users/${userId}`);
-      const userData = await res.json();
-
-      if (!res.ok) {
-        throw new Error(userData.error || "Bir hata oluştu");
-      }
-
+      const userData = await fetchUserDetails(userId);
       setUsername(userData.username);
       setUserProfilePicture(userData.imageUrl);
       setUserPerm(userData.role);
@@ -59,22 +54,16 @@ const SelectCoursePage = () => {
   const formattedPerm = capitalizeFirstLetter(userPerm);
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const getCourses = async () => {
       try {
-        const res = await fetch("/api/courses");
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(`Server responded with status code ${res.status}`);
-        }
-
-        dispatch({ type: "SET_COURSES", payload: data });
+        const coursesData = await fetchAllCourses();
+        dispatch({ type: "SET_COURSES", payload: coursesData });
       } catch (error) {
         console.error("Dersler alınamadı:", error);
       }
     };
 
-    fetchCourses();
+    getCourses();
   }, [dispatch]);
 
   const handleNavigate = (path) => {

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useCoursesContext } from "../../hooks/useCoursesContext";
+import { createCourse } from "../../api"; // API fonksiyonunu içe aktarın
 
 const CourseForm = () => {
   const { dispatch } = useCoursesContext();
@@ -18,29 +19,19 @@ const CourseForm = () => {
       minimumSkill,
     };
 
-    const res = await fetch("/api/courses", {
-      method: "POST",
-      body: JSON.stringify(course),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      setError(data.message);
-    }
-
-    if (res.ok) {
+    try {
+      const data = await createCourse(course);
       setTitle("");
       setDescription("");
       setMinimumSkill("");
       setError(null);
       console.log(data);
       dispatch({ type: "CREATE_COURSE", payload: data });
+    } catch (error) {
+      setError(error.message);
     }
   };
+
   return (
     <div>
       <form action="" className="courseForm" onSubmit={handleSubmit}>

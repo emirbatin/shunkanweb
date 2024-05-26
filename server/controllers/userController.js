@@ -23,19 +23,18 @@ exports.createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     let imagePath, bannerPath;
 
-    // Assuming 'image' and 'banner' are the field names for the uploaded files
     if (req.files) {
       const uploadDir = "uploads";
 
       // Handle profile image if uploaded
       if (req.files.image) {
-        const imageFileName = path.basename(req.files.image[0].path); // Adjust based on your file structure
+        const imageFileName = path.basename(req.files.image[0].path);
         imagePath = `${uploadDir}/${imageFileName}`;
       }
 
       // Handle banner image if uploaded
       if (req.files.banner) {
-        const bannerFileName = path.basename(req.files.banner[0].path); // Adjust based on your file structure
+        const bannerFileName = path.basename(req.files.banner[0].path);
         bannerPath = `${uploadDir}/${bannerFileName}`;
       }
     }
@@ -54,28 +53,37 @@ exports.createUser = async (req, res) => {
       role,
     });
 
-    // Append URLs if paths are available
-    if (imagePath) {
-      user.imageUrl = `${req.protocol}://${req.get("host")}/${imagePath}`;
+    const userObject = user.toObject();
+    if (userObject.imagePath) {
+      userObject.imageUrl = `${req.protocol}://${req.get("host")}/${
+        userObject.imagePath
+      }`;
     }
-    if (bannerPath) {
-      user.bannerUrl = `${req.protocol}://${req.get("host")}/${bannerPath}`;
+    if (userObject.bannerPath) {
+      userObject.bannerUrl = `${req.protocol}://${req.get("host")}/${
+        userObject.bannerPath
+      }`;
     }
 
-    res.status(201).json(user);
+    res.status(201).json(userObject);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-//Login User
-
+// Login User
 exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username: username });
 
     if (user) {
+      if (user.banned) {
+        return res
+          .status(403)
+          .send({ error: "This account banned from this website" });
+      }
+
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (isPasswordMatch) {
         // JWT token oluştur
@@ -87,7 +95,7 @@ exports.loginUser = async (req, res) => {
         res.json({ user: user._id, token, message: "Logged in successfully" });
       } else {
         // Şifre eşleşmiyor
-        res.status(400).send({ error: "Invalid login credentials" });
+        res.status(400).send({ error: "Username or password is wrong" });
       }
     } else {
       // Kullanıcı bulunamadı
@@ -100,35 +108,42 @@ exports.loginUser = async (req, res) => {
 };
 
 // Tüm Kullanıcıları Getir
-
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}).select("-password");
-    res.send(users);
+
+    const usersWithUrls = users.map((user) => {
+      const userObject = user.toObject();
+      if (userObject.imagePath) {
+        userObject.imageUrl = `${req.protocol}://${req.get("host")}/${userObject.imagePath}`;
+      }
+      if (userObject.bannerPath) {
+        userObject.bannerUrl = `${req.protocol}://${req.get("host")}/${userObject.bannerPath}`;
+      }
+      return userObject;
+    });
+
+    res.send(usersWithUrls);
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
-// Kullanıcı ID'sine Göre Getir
 
+// Kullanıcı ID'sine Göre Getir
 exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
-    // Kullanıcı objesine imageUrl alanı ekleyin
+
     const userObject = user.toObject();
     if (userObject.imagePath) {
-      userObject.imageUrl = `${req.protocol}://${req.get("host")}/${
-        userObject.imagePath
-      }`;
+      userObject.imageUrl = `${req.protocol}://${req.get("host")}/${userObject.imagePath}`;
     }
     if (userObject.bannerPath) {
-      userObject.bannerUrl = `${req.protocol}://${req.get("host")}/${
-        userObject.bannerPath
-      }`;
+      userObject.bannerUrl = `${req.protocol}://${req.get("host")}/${userObject.bannerPath}`;
     }
     res.send(userObject);
   } catch (error) {
@@ -136,8 +151,8 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-// Kullanıcı Güncelleme
 
+// Kullanıcı Güncelleme
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
   try {
@@ -148,7 +163,6 @@ exports.updateUser = async (req, res) => {
 
     const updates = req.body;
 
-    // Profile Image Update
     if (req.files && req.files.image) {
       const oldImagePath = user.imagePath
         ? path.join(__dirname, "..", user.imagePath)
@@ -162,7 +176,6 @@ exports.updateUser = async (req, res) => {
       user.imageUrl = `${req.protocol}://${req.get("host")}/${user.imagePath}`;
     }
 
-    // Banner Image Update
     if (req.files && req.files.banner) {
       const oldBannerPath = user.bannerPath
         ? path.join(__dirname, "..", user.bannerPath)
@@ -178,23 +191,32 @@ exports.updateUser = async (req, res) => {
       }`;
     }
 
-    // Password Update
     if (updates.password) {
       user.password = await bcrypt.hash(updates.password, saltRounds);
     }
 
-    // Other Updates
     Object.keys(updates).forEach((update) => {
       if (update !== "password") user[update] = updates[update];
     });
 
-    // wrongAnswers Update
     if (updates.wrongAnswers) {
       user.wrongAnswers = updates.wrongAnswers;
     }
 
     await user.save();
-    res.status(200).json(user);
+    const updatedUserObject = user.toObject();
+    if (updatedUserObject.imagePath) {
+      updatedUserObject.imageUrl = `${req.protocol}://${req.get("host")}/${
+        updatedUserObject.imagePath
+      }`;
+    }
+    if (updatedUserObject.bannerPath) {
+      updatedUserObject.bannerUrl = `${req.protocol}://${req.get("host")}/${
+        updatedUserObject.bannerPath
+      }`;
+    }
+
+    res.status(200).json(updatedUserObject);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -250,7 +272,7 @@ exports.addCoursePoints = async (req, res) => {
 
     user.totalPoint += points;
     await user.save();
-    
+
     res.status(200).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });

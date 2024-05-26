@@ -49,7 +49,7 @@ const Section5 = ({ onPlanSelect, goToNextSection, userInfo }) => {
         }
 
         console.log("Registration successful. User data:", json);
-        navigate("/success");
+        navigate("/login");
       } catch (error) {
         console.error("Registration failed:", error);
         // Burada kullanıcıya hata mesajını göstermek için bir mekanizma ekleyebilirsiniz.
