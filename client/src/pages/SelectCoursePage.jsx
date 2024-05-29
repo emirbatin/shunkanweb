@@ -26,6 +26,7 @@ const SelectCoursePage = () => {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (userToken) {
@@ -43,12 +44,11 @@ const SelectCoursePage = () => {
       setUserPerm(userData.role);
       setLoading(false);
     } catch (error) {
-      console.error("Kullanıcı bilgileri alınamadı:", error);
+      console.error(t("Error fetching user details:"), error);
       navigate("/login");
     }
   };
 
-  const { t } = useTranslation();
   const { courses, dispatch } = useCoursesContext();
   const formattedName = capitalizeFirstLetter(username);
   const formattedPerm = capitalizeFirstLetter(userPerm);
@@ -59,12 +59,12 @@ const SelectCoursePage = () => {
         const coursesData = await fetchAllCourses();
         dispatch({ type: "SET_COURSES", payload: coursesData });
       } catch (error) {
-        console.error("Dersler alınamadı:", error);
+        console.error(t("Error fetching courses:"), error);
       }
     };
 
     getCourses();
-  }, [dispatch]);
+  }, [dispatch, t]);
 
   const handleNavigate = (path) => {
     navigate(path);

@@ -38,23 +38,23 @@ const CourseContentPage = () => {
     if (userToken) {
       const data = jwtDecode(userToken);
       fetchUserDetails(data.id)
-        .then(userData => console.log("User Details:", userData))
-        .catch(error => console.error("Error fetching user details:", error));
+        .then(userData => console.log(t("User Details:"), userData))
+        .catch(error => console.error(t("Error fetching user details:"), error));
     }
-  }, [userToken]);
+  }, [userToken, t]);
 
   const fetchCourse = useCallback(async (courseId) => {
     setLoadingCourse(true);
     try {
       const courseData = await fetchCourseDetails(courseId);
       setCourse(courseData);
-      setTabContents(courseData.questions.map((_, index) => `İçerik ${index + 1}`));
+      setTabContents(courseData.questions.map((_, index) => `${t("Content")} ${index + 1}`));
     } catch (error) {
-      console.error("Error fetching course details:", error);
+      console.error(t("Error fetching course details:"), error);
     } finally {
       setLoadingCourse(false);
     }
-  }, []);
+  }, [t]);
 
   const fetchQuestion = useCallback(async (questionId, index) => {
     console.log("API URL:", process.env.REACT_APP_API_URL);
@@ -69,11 +69,11 @@ const CourseContentPage = () => {
         return updatedTabContents;
       });
     } catch (error) {
-      console.error("Error fetching question details:", error);
+      console.error(t("Error fetching question details:"), error);
     } finally {
       setLoadingQuestion(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     fetchCourse(courseId);
@@ -127,7 +127,7 @@ const CourseContentPage = () => {
     if (finishTriggered) {
       handleFinish();
     }
-  }, [finishTriggered, totalPoints]); // finishTriggered veya totalPoints değiştiğinde handleFinish fonksiyonunu çağır
+  }, [finishTriggered, totalPoints, handleFinish]); // finishTriggered veya totalPoints değiştiğinde handleFinish fonksiyonunu çağır
 
   const handleNextQuestion = useCallback(() => {
     if (!isLastQuestion) {
@@ -161,17 +161,17 @@ const CourseContentPage = () => {
       try {
         // Yanlış cevapları kaydet
         await saveWrongAnswers(userId, wrongAnswers);
-        console.log("Answers saved successfully");
+        console.log(t("Answers saved successfully"));
 
         // Kullanıcı puanlarını güncelle
         await addCoursePoints(userId, totalPoints);
-        console.log("Points added successfully");
+        console.log(t("Points added successfully"));
       } catch (error) {
-        console.error("Error saving answers or adding points:", error);
+        console.error(t("Error saving answers or adding points:"), error);
       }
     }
     navigate("/courses");
-  }, [navigate, userToken, wrongAnswers, totalPoints]);
+  }, [navigate, userToken, wrongAnswers, totalPoints, t]);
 
   const renderContent = (index) => {
     let mediaUrl = index === 0 ? question?.mediaUrl : tabContents[index];
@@ -183,7 +183,7 @@ const CourseContentPage = () => {
             {question && question.mediaType === "image" ? (
               <img
                 src={mediaUrl}
-                alt="Question media"
+                alt={t("Question media")}
                 style={{ width: "100%", height: "auto" }}
               />
             ) : question && question.mediaType === "video" ? (
@@ -196,14 +196,14 @@ const CourseContentPage = () => {
           </>
         ) : (
           <div style={{ color: "white", fontSize: "20px" }}>
-            No media available
+            {t("No media available")}
           </div>
         )}
       </div>
     );
   };
 
-  const getOptionContent = (option) => option?.description || "Seçenek Yok";
+  const getOptionContent = (option) => option?.description || t("No option");
 
   if (loadingCourse || loadingQuestion) {
     return (
@@ -254,12 +254,12 @@ const CourseContentPage = () => {
                   </Button>
                 ))
               ) : (
-                <Typography variant="h1">No answers available.</Typography>
+                <Typography variant="h1">{t("No answers available")}</Typography>
               )}
             </div>
             {/* Display total points */}
             <Typography variant="h6" style={{ marginTop: "20px" }}>
-              Toplam Puan: {totalPoints}
+              {t("Total Points")}: {totalPoints}
             </Typography>
           </div>
         </div>
@@ -268,13 +268,13 @@ const CourseContentPage = () => {
       {/* Yanlış Cevap Verilerini Ekrana Yazdırılması */}
 
       {/* 
-      <Typography variant="h6">Yanlış Cevaplar:</Typography>
+      <Typography variant="h6">{t("Wrong Answers")}:</Typography>
       {wrongAnswers.map((wrongAnswer, index) => (
         <Typography key={index} variant="body1">
-          Doğru Cevap: {wrongAnswer.correctAns}, Seçtiğiniz Cevap:{" "}
+          {t("Correct Answer")}: {wrongAnswer.correctAns}, {t("Your Answer")}:{" "}
           {wrongAnswer.selectedAns !== null
             ? wrongAnswer.selectedAns
-            : "Boş Geçildi"}
+            : t("Skipped")}
         </Typography>
       ))}
       */}
@@ -284,7 +284,7 @@ const CourseContentPage = () => {
           <div className="flex flex-grow justify-start">
             {!isAnswerCorrect && (
               <Typography variant="body1" color="error">
-                Cevap yanlış, doğru cevap:{" "}
+                {t("The answer is wrong, correct answer is")}:{" "}
                 {wrongAnswers[wrongAnswers.length - 1]?.correctAns}
               </Typography>
             )}
@@ -296,7 +296,7 @@ const CourseContentPage = () => {
                   style={{ margin: 10 }}
                   onClick={handleSkip}
                 >
-                  Skip
+                  {t("Skip")}
                 </Button>
               )}
           </div>
@@ -314,10 +314,10 @@ const CourseContentPage = () => {
               }
             >
               {isLastQuestion && showFeedback
-                ? "Bitir"
+                ? t("Finish")
                 : showFeedback
-                ? "Sonraki"
-                : "Kontrol Et"}
+                ? t("Next")
+                : t("Check Answer")}
             </Button>
           </div>
         </div>

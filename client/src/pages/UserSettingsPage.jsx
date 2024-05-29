@@ -19,7 +19,8 @@ const UserSettingsPage = () => {
     email: "",
     password: "",
   });
-
+  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [bannerImageFile, setBannerImageFile] = useState(null);
 
   useEffect(() => {
     if (userToken) {
@@ -33,7 +34,7 @@ const UserSettingsPage = () => {
       const data = await fetchUserDetails(id);
       setUserData({ username: data.username, email: data.email, password: "" });
     } catch (error) {
-      console.error("Kullanıcı bilgileri alınamadı:", error);
+      console.error(t("Error fetching user details:"), error);
     }
   };
 
@@ -63,10 +64,10 @@ const UserSettingsPage = () => {
 
     try {
       const data = await updateUserDetails(userId, formData);
-      console.log("Kullanıcı bilgileri güncellendi:", data);
+      console.log(t("User details updated:"), data);
       // Optionally, navigate to a different page or show a success message
     } catch (error) {
-      console.error("Kullanıcı bilgileri güncellenemedi:", error);
+      console.error(t("Error updating user details:"), error);
     }
   };
 

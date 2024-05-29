@@ -134,7 +134,7 @@ const AdminPage = () => {
           <div className="flex flex-grow h-full w-full">
             <div className="rounded-lg mb-6 w-full">
               <Typography variant="h6" className="text-2xl font-bold">
-              {t("visitorstats")}
+              {t("coursestats")}
               </Typography>
               <div style={{ width: "100%", height: 400 }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -149,11 +149,6 @@ const AdminPage = () => {
                       dataKey="newCourses"
                       stroke="#FF9789"
                       activeDot={{ r: 8 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="newQuestions"
-                      stroke="#FF5A95"
                     />
                   </LineChart>
                 </ResponsiveContainer>
