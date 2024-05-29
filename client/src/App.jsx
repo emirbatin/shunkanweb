@@ -18,6 +18,8 @@ import UserSettingsPage from "./pages/UserSettingsPage.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import ShuwaPage from "./pages/ShuwaPage.jsx";
+import AddNewCoursePage from "./pages/AddNewCoursePage.jsx";
+import AddNewQuestionPage from "./pages/AddNewQuestionPage.jsx";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -123,6 +125,22 @@ function App() {
               element={
                 <PrivateRoute isAuthenticated={isAuthenticated}>
                   <ShuwaPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/add-new-course"
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated}>
+                  <AddNewCoursePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/add-new-question"
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated}>
+                  <AddNewQuestionPage />
                 </PrivateRoute>
               }
             />

@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "cropperjs": "^1.6.2",
     "lottie-react": "^2.4.0",
+    "react-cropper": "^2.3.3",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5"
   }

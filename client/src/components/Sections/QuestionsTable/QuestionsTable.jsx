@@ -13,8 +13,12 @@ import {
   Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const QuestionsTable = ({ questions }) => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredQuestions, setFilteredQuestions] = useState(questions);
 
@@ -32,16 +36,21 @@ const QuestionsTable = ({ questions }) => {
     );
   };
 
+  const handleClick = () => {
+    navigate("/add-new-question");
+    console.log("Add new question clicked");
+  };
+
   return (
     <div>
       <div className="flex flex-row justify-between">
         <Typography variant="h6" className="text-2xl font-bold mb-4 text-left">
-          Questions
+          {t("questions")}
         </Typography>
         <Tooltip title={"Add new question"}>
-        <IconButton color="primary" href="">
-          <AddIcon />
-        </IconButton>
+          <IconButton color="primary" onClick={handleClick}>
+            <AddIcon />
+          </IconButton>
         </Tooltip>
       </div>
       <br />
@@ -58,11 +67,11 @@ const QuestionsTable = ({ questions }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Media</TableCell>
-              <TableCell>ID</TableCell>
-              <TableCell>Question</TableCell>
-              <TableCell>Point</TableCell>
-              <TableCell>Correct Answer</TableCell>
+              <TableCell>{t("media")}</TableCell>
+              <TableCell>{t("id")}</TableCell>
+              <TableCell>{t("question")}</TableCell>
+              <TableCell>{t("point")}</TableCell>
+              <TableCell>{t("correctanswer")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -78,7 +87,7 @@ const QuestionsTable = ({ questions }) => {
                   )}
                 </TableCell>
                 <TableCell>{question._id}</TableCell>
-                <TableCell>{question.questionText}</TableCell>
+                <TableCell>{t(question.questionText)}</TableCell>
                 <TableCell>{question.points}</TableCell>
                 <TableCell>{question.correctAnswer}</TableCell>
                 <TableCell></TableCell>

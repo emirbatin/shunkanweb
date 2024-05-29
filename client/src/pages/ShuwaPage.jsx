@@ -16,7 +16,7 @@ import {
 
 const ShuwaPage = () => {
   const { t } = useTranslation();
-  const targetWord = "konnichiwa"; // Hedef kelimeyi değişken içinde sakla
+  const targetWord = "hello"; // Hedef kelimeyi değişken içinde sakla
   const [sentence, setSentence] = useState("");
   const [feedback, setFeedback] = useState("");
   const [timeLeft, setTimeLeft] = useState(10); // 10 saniyelik süre

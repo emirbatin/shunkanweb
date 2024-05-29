@@ -61,6 +61,31 @@
    "totaluser":"Total Users",
    "totalcourses":"Total Courses",
    "totalquestions":"Total Question",
-   "newusers": "New Users"
-
+   "newusers": "New Users",
+   "konnichiwa" : "Hello",
+   "users" : "Users",
+   "profilepicture" : "Profile Picture",
+   "name" : "Name",
+   "registered" : "Registered",
+   "role" : "Role",
+   "actions" : "Actions",
+   "id": "ID",
+   "plan" : "Plan",
+   "edit" : "Edit",
+   "beginner" : "Beginner",
+   "intermediate" : "Intermediate",
+   "advanced" : "Advanced",
+   "thumbnail" : "Thumbnail",
+   "title" : "Title",
+   "minimumskill" : "Minimum Skill",
+   "media" : "Media",
+   "question" : "Question",
+   "questions" : "Questions",
+   "answer" : "Answer",
+   "point" : "Point",
+   "correctanswer" : "Correct Answer",
+   "selectasection" : "Select a Section",
+   "visitorstats": "Visitor Statistics",
+   "coursesnotfound" : "Error : Courses not found"
+   
 }
