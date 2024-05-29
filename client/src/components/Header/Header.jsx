@@ -20,7 +20,7 @@ function CustomAppBar({ showIconButton, showThemeButton }) {
         {showThemeButton && <ThemeSelector />}
 
         <Typography className="pl-5" variant="h5">
-          <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+          <Link to="/courses" style={{ color: "inherit", textDecoration: "none" }}>
             {t("appTitle")}
           </Link>
         </Typography>

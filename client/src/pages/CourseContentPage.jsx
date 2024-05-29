@@ -17,7 +17,6 @@ const CourseContentPage = () => {
   const { t } = useTranslation();
   const { courseId } = useParams();
   const navigate = useNavigate();
-
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [course, setCourse] = useState(null);
   const [question, setQuestion] = useState(null);
@@ -217,7 +216,7 @@ const CourseContentPage = () => {
   }
 
   if (!course || !question) {
-    return <div>Error: Course or Question not found.</div>;
+    return <div>{t("coursesnotfound")}</div>;
   }
 
   return (

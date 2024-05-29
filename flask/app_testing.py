@@ -17,7 +17,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 model_file_path = os.path.join(os.path.dirname(__file__), 'ML_Models/action.keras')
-actions = np.array(['konnichiwa', 'arigatou', 'gomen', 'suki', 'nani', 'daijoubu', 'namae', 'genki'])
+actions = np.array(['hello', 'howareyou', 'thanks'])
 model = load_model(model_file_path)
 
 mp_holistic = mp.solutions.holistic

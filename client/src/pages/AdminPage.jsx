@@ -74,7 +74,7 @@ const AdminPage = () => {
       case "questions":
         return <QuestionsTable questions={questions} />;
       default:
-        return <div>Select a section</div>;
+        return <div>{t("selectasection")}</div>;
     }
   };
 
@@ -98,7 +98,7 @@ const AdminPage = () => {
       <Sidebar />
       <div className="flex flex-col flex-grow px-10 overflow-auto h-screen pb-20">
         <div className="flex justify-between items-center mb-6">
-          <Typography variant="h4">Dashboard</Typography>
+          <Typography variant="h4">{t("dashboard")}</Typography>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <div className="p-6 rounded-lg">
@@ -134,7 +134,7 @@ const AdminPage = () => {
           <div className="flex flex-grow h-full w-full">
             <div className="rounded-lg mb-6 w-full">
               <Typography variant="h6" className="text-2xl font-bold">
-                Visitor Statistics
+              {t("visitorstats")}
               </Typography>
               <div style={{ width: "100%", height: 400 }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -163,7 +163,7 @@ const AdminPage = () => {
           <div className="flex flex-grow h-full w-full">
             <div className="rounded-lg mb-6 w-full">
               <Typography variant="h6" className="text-2xl font-bold">
-                New Users
+              {t("newusers")}
               </Typography>
               <div style={{ width: "100%", height: 400 }}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -185,13 +185,13 @@ const AdminPage = () => {
           <div className="bg-white flex flex-col w-full h-full rounded-lg p-8">
             <div className="menu flex justify-around mb-4">
               <Button onClick={() => setActiveSection("users")}>
-                <Typography variant="h6">Users</Typography>
+                <Typography variant="h6">{t("users")}</Typography>
               </Button>
               <Button onClick={() => setActiveSection("courses")}>
-                <Typography variant="h6">Courses</Typography>
+                <Typography variant="h6">{t("courses")}</Typography>
               </Button>
               <Button onClick={() => setActiveSection("questions")}>
-                <Typography variant="h6">Questions</Typography>
+                <Typography variant="h6">{t("questions")}</Typography>
               </Button>
             </div>
             {renderSection()}

@@ -67,7 +67,8 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
       navigate("/courses");
@@ -103,9 +104,15 @@ const LoginPage = () => {
         <Typography variant="h4" sx={{ mb: 1 }}>
           {t("pickupwhereyouleftoffandlogin!")}
         </Typography>
-        <form className="flex flex-col justify-center items-start text-left w-full" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col justify-center items-start text-left w-full"
+          onSubmit={handleSubmit}
+        >
           <div className="flex flex-col justify-center items-start text-left w-full mb-1">
-            <Typography variant="subtitle1" sx={{ mb: 0.5, color: "var(--text-color)" }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ mb: 0.5, color: "var(--text-color)" }}
+            >
               {t("username")}
             </Typography>
             <input
@@ -121,7 +128,10 @@ const LoginPage = () => {
             />
           </div>
           <div className="flex flex-col justify-center items-start text-left w-full">
-            <Typography variant="subtitle1" sx={{ mb: 0.5, color: "var(--text-color)" }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ mb: 0.5, color: "var(--text-color)" }}
+            >
               {t("password")}
             </Typography>
             <input
@@ -136,30 +146,70 @@ const LoginPage = () => {
               onChange={handlePasswordChange}
             />
           </div>
-          <label className="flex flex-row mb-2 mt-2" htmlFor="cameraAccessCheckbox">
-            <input id="rememberMeCheckbox" type="checkbox" checked={rememberMe} onChange={handleRememberMeChange} />
-            <Typography className="cameraAccessLabel" variant="h7" sx={{ ml: 1 }}>
+          <label
+            className="flex flex-row mb-2 mt-2"
+            htmlFor="cameraAccessCheckbox"
+          >
+            <input
+              id="rememberMeCheckbox"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={handleRememberMeChange}
+            />
+            <Typography
+              className="cameraAccessLabel"
+              variant="h7"
+              sx={{ ml: 1 }}
+            >
               {t("rememberme")}
             </Typography>
           </label>
-          <Button sx={{ mt: 1, height: 50, width: 150 }} variant="contained" type="submit">
+          <Button
+            sx={{ mt: 1, height: 50, width: 150 }}
+            variant="contained"
+            type="submit"
+          >
             {t("login")}
           </Button>
           <div className="flex flex-row justify-between pt-2 pb-2 items-center text-center w-full">
-            <hr className="w-1/2 h-2 border-none rounded-md" style={{ backgroundColor: "var(--button-color)" }} />
-            <Typography variant="h5" sx={{ color: "var(--button-color)", mb: 1, ml: 1, mr: 1 }}>
+            <hr
+              className="w-1/2 h-2 border-none rounded-md"
+              style={{ backgroundColor: "var(--button-color)" }}
+            />
+            <Typography
+              variant="h5"
+              sx={{ color: "var(--button-color)", mb: 1, ml: 1, mr: 1 }}
+            >
               {t("or")}
             </Typography>
-            <hr className="w-1/2 h-2 border-none rounded-md" style={{ backgroundColor: "var(--button-color)" }} />
+            <hr
+              className="w-1/2 h-2 border-none rounded-md"
+              style={{ backgroundColor: "var(--button-color)" }}
+            />
           </div>
           <div className="grid grid-cols-2 grid-rows-1 gap-4">
-            <Button className="mt-0 h-10 w-40 rounded-md text-white cursor-pointer apple-button" variant="contained" startIcon={<AppleIcon className="appleIcon" />} type="button">
+            <Button
+              className="mt-0 h-10 w-40 rounded-md text-white cursor-pointer apple-button"
+              variant="contained"
+              startIcon={<AppleIcon className="appleIcon" />}
+              type="button"
+            >
               {t("signinwithapple")}
             </Button>
-            <Button className="mt-0 h-10 w-40 rounded-md text-white cursor-pointer facebook-button" variant="contained" startIcon={<FacebookIcon className="facebookIcon" />} type="button">
+            <Button
+              className="mt-0 h-10 w-40 rounded-md text-white cursor-pointer facebook-button"
+              variant="contained"
+              startIcon={<FacebookIcon className="facebookIcon" />}
+              type="button"
+            >
               {t("signinwithfacebook")}
             </Button>
-            <Button className="mt-0 h-10 w-40 rounded-md text-white cursor-pointer google-button" variant="contained" startIcon={<Google className="googleIcon" />} type="button">
+            <Button
+              className="mt-0 h-10 w-40 rounded-md text-white cursor-pointer google-button"
+              variant="contained"
+              startIcon={<Google className="googleIcon" />}
+              type="button"
+            >
               {t("signinwithgoogle")}
             </Button>
           </div>
@@ -168,8 +218,16 @@ const LoginPage = () => {
       <div className="flex-1 flex flex-col justify-center pr-80 pb-40 ml-10">
         <div id="loginPageLottie" className="flex w-full-150 h-auto"></div>
       </div>
-      <Snackbar open={!!error} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+      <Snackbar
+        open={!!error}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           {error}
         </Alert>
       </Snackbar>

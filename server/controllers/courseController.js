@@ -46,8 +46,10 @@ const getCourse = async (req, res) => {
   }
 };
 
-// Create course
 const createCourse = async (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
+
   const { title, description, minimumSkill, questions } = req.body;
 
   let imagePath;
@@ -58,11 +60,18 @@ const createCourse = async (req, res) => {
   }
 
   try {
+    // Parse questions from JSON string
+    const parsedQuestions = JSON.parse(questions);
+
+    if (!title || !description || !minimumSkill || !Array.isArray(parsedQuestions)) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const course = await Course.create({
       title,
       description,
       minimumSkill,
-      questions,
+      questions: parsedQuestions,
       imagePath
     });
 
@@ -73,9 +82,11 @@ const createCourse = async (req, res) => {
 
     res.status(201).json(courseObject);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error("Course creation failed:", error);
+    res.status(500).json({ message: "Course creation failed" });
   }
 };
+
 
 // Delete course
 const deleteCourse = async (req, res) => {

@@ -14,8 +14,10 @@ import {
 } from "@mui/material";
 import { Block, CheckCircle } from "@mui/icons-material";
 import { banUser } from "../../../api";  // API fonksiyonunu import edin
+import { useTranslation } from "react-i18next";
 
 const UsersTable = ({ users }) => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState(users);
 
@@ -54,7 +56,7 @@ const UsersTable = ({ users }) => {
   return (
     <div>
       <Typography variant="h6" className="text-2xl font-bold mb-4 text-left">
-        Users
+      {t("users")}
       </Typography>
       <br />
       <TextField
@@ -70,15 +72,15 @@ const UsersTable = ({ users }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Profile Image</TableCell>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Username</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Registered</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Plan</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>{t("profilepicture")}</TableCell>
+              <TableCell>{t("id")}</TableCell>
+              <TableCell>{t("name")}</TableCell>
+              <TableCell>{t("username")}</TableCell>
+              <TableCell>{t("email")}</TableCell>
+              <TableCell>{t("registered")}</TableCell>
+              <TableCell>{t("role")}</TableCell>
+              <TableCell>{t("plan")}</TableCell>
+              <TableCell>{t("actions")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

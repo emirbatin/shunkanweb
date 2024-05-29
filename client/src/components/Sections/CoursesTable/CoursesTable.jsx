@@ -14,8 +14,12 @@ import {
   Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const CoursesTable = ({ courses }) => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCourses, setFilteredCourses] = useState(courses);
 
@@ -31,14 +35,19 @@ const CoursesTable = ({ courses }) => {
     );
   };
 
+  const handleClick = () => {
+    navigate("/add-new-course");
+    console.log("Add new question clicked");
+  };
+
   return (
     <div>
       <div className="flex flex-row justify-between">
         <Typography variant="h6" className="text-2xl font-bold mb-4 text-left">
-          Courses
+          {t("courses")}
         </Typography>
         <Tooltip title={"Add new course"}>
-          <IconButton color="primary" href="">
+          <IconButton color="primary" href="" onClick={handleClick}>
             <AddIcon />
           </IconButton>
         </Tooltip>
@@ -57,10 +66,10 @@ const CoursesTable = ({ courses }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Thumbnail</TableCell>
-              <TableCell>ID</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Minimum Skill</TableCell>
+              <TableCell>{t("thumbnail")}</TableCell>
+              <TableCell>{t("id")}</TableCell>
+              <TableCell>{t("title")}</TableCell>
+              <TableCell>{t("minimumskill")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -77,7 +86,7 @@ const CoursesTable = ({ courses }) => {
                 </TableCell>
                 <TableCell>{course._id}</TableCell>
                 <TableCell>{course.title}</TableCell>
-                <TableCell>{course.minimumSkill}</TableCell>
+                <TableCell>{t(course.minimumSkill)}</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             ))}
