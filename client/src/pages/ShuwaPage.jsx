@@ -16,12 +16,16 @@ import {
 
 const ShuwaPage = () => {
   const { t } = useTranslation();
-  const targetWord = "hello"; // Hedef kelimeyi değişken içinde sakla
+  const targetWords = ["hello", "howareyou", "thanks"]; // Hedef kelimeler dizisi
+  const [currentWordIndex, setCurrentWordIndex] = useState(0); // Mevcut hedef kelimenin indeksi
   const [sentence, setSentence] = useState("");
   const [feedback, setFeedback] = useState("");
   const [timeLeft, setTimeLeft] = useState(10); // 10 saniyelik süre
   const [correctSignDetected, setCorrectSignDetected] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [isLevelCompleted, setIsLevelCompleted] = useState(false); // Current level completion status
+
+  const targetWord = targetWords[currentWordIndex]; // Mevcut hedef kelime
 
   useEffect(() => {
     let timer;
@@ -42,6 +46,7 @@ const ShuwaPage = () => {
           setFeedback("Yanlış cevap");
         }
         setIsConnected(false); // Disconnect client when time is up
+        setIsLevelCompleted(true); // Mark level as completed
       }, 10000); // 10 saniye
 
       connectSocket();
@@ -56,6 +61,7 @@ const ShuwaPage = () => {
           setCorrectSignDetected(true);
           setFeedback("Doğru cevap!");
           setIsConnected(false); // Correct sign detected, disconnect client
+          setIsLevelCompleted(true); // Mark level as completed
         } else {
           setCorrectSignDetected(false);
         }
@@ -85,12 +91,25 @@ const ShuwaPage = () => {
   useEffect(() => {
     if (timeLeft === 0 && !correctSignDetected) {
       setFeedback("Yanlış cevap");
+      setIsLevelCompleted(true); // Mark level as completed
     }
   }, [timeLeft, correctSignDetected]);
 
   const handleButtonClick = () => {
-    setIsConnected((prev) => !prev);
-    setFeedback(""); // feedback'i bağlantı durumu değiştiğinde sıfırlıyoruz
+    if (isLevelCompleted) {
+      // Go to the next level
+      if (currentWordIndex < targetWords.length - 1) {
+        setCurrentWordIndex((prevIndex) => prevIndex + 1);
+      } else {
+        setCurrentWordIndex(0); // Loop back to the first word
+      }
+      setIsLevelCompleted(false); // Reset level completion status
+      setFeedback(""); // Reset feedback for the next level
+    } else {
+      // Start the current level
+      setIsConnected((prev) => !prev);
+      setFeedback(""); // feedback'i bağlantı durumu değiştiğinde sıfırlıyoruz
+    }
   };
 
   return (
@@ -125,7 +144,7 @@ const ShuwaPage = () => {
               variant="contained"
               onClick={handleButtonClick}
             >
-              {isConnected ? "Bitir" : "Başla"}
+              {isLevelCompleted ? "Next" : isConnected ? "Bitir" : "Başla"}
             </Button>
           </div>
         </div>
