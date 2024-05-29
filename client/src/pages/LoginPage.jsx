@@ -35,14 +35,14 @@ const LoginPage = () => {
       });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Login failed");
+        throw new Error(errorData.error || t("Login failed"));
       }
       const json = await response.json();
       const token = json.token;
       console.log("Token:", token); // Token'ı kontrol edin
       const storage = rememberMe ? localStorage : sessionStorage;
       storage.setItem("token", token);
-      console.log("Login successful. Token:", token);
+      console.log(t("Login successful. Token:"), token);
       setIsLoggedIn(true);
       navigate("/courses");
     } catch (error) {
@@ -73,7 +73,7 @@ const LoginPage = () => {
       setIsLoggedIn(true);
       navigate("/courses");
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const animation = lottie.loadAnimation({

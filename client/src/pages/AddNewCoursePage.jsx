@@ -19,21 +19,26 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-  OutlinedInput
+  OutlinedInput,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { fetchAllQuestions, createCourse } from '../api'; 
+import { fetchAllQuestions, createCourse } from "../api";
+import { useTranslation } from "react-i18next";
 
 const AddNewCoursePage = () => {
+  const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
-  const [thumbnailFile, setThumbnailFile] = useState(null); 
+  const [thumbnailFile, setThumbnailFile] = useState(null);
   const [skill, setSkill] = useState("");
   const [questions, setQuestions] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
   const [allQuestions, setAllQuestions] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -41,7 +46,7 @@ const AddNewCoursePage = () => {
         const data = await fetchAllQuestions();
         setAllQuestions(data);
       } catch (error) {
-        console.error("Sorular alınamadı:", error);
+        console.error(t("Failed to fetch questions:"), error);
       }
     };
 
@@ -59,7 +64,7 @@ const AddNewCoursePage = () => {
   const handleThumbnailChange = (event) => {
     const file = event.target.files[0];
     setThumbnail(URL.createObjectURL(file));
-    setThumbnailFile(file); 
+    setThumbnailFile(file);
   };
 
   const handleSkillChange = (event) => {
@@ -72,7 +77,6 @@ const AddNewCoursePage = () => {
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    setCurrentQuestionIndex(null);
   };
 
   const handleSelectQuestion = (question) => {
@@ -87,38 +91,41 @@ const AddNewCoursePage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const questionIds = questions.map(q => q._id);
-  
+    const questionIds = questions.map((q) => q._id);
+
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('minimumSkill', skill);
-    formData.append('questions', JSON.stringify(questionIds));
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("minimumSkill", skill);
+    formData.append("questions", JSON.stringify(questionIds));
     if (thumbnailFile) {
-      formData.append('image', thumbnailFile);
+      formData.append("image", thumbnailFile);
     }
-  
-    
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-  
+
     try {
       const response = await createCourse(formData);
-      console.log("Course created successfully:", response);
+      console.log(t("Course created successfully:"), response);
+      setSnackbarMessage(t("Course created successfully!"));
+      setSnackbarOpen(true);
     } catch (error) {
-      console.error("Course creation failed:", error);
+      console.error(t("Course creation failed:"), error);
+      setSnackbarMessage(t("Course creation failed!"));
+      setSnackbarOpen(true);
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
   const getMediaUrl = (question) => {
-    return question.mediaUrl || 'https://via.placeholder.com/150';
-  }
+    return question.mediaUrl || "https://via.placeholder.com/150";
+  };
 
   return (
     <Container maxWidth="md">
       <Typography variant="h5" component="h1" gutterBottom>
-        Add New Course
+        {t("Add New Course")}
       </Typography>
       <br />
       <form onSubmit={handleSubmit}>
@@ -131,19 +138,19 @@ const AddNewCoursePage = () => {
                 id="thumbnail-upload"
                 className="hidden"
                 onChange={handleThumbnailChange}
-                name="image" 
+                name="image"
               />
               <label htmlFor="thumbnail-upload">
                 <img
                   src={thumbnail || "https://via.placeholder.com/150"}
-                  alt="Course Thumbnail"
+                  alt={t("Course Thumbnail")}
                   className="w-48 h-48 cursor-pointer border border-gray-300 rounded-lg"
                 />
               </label>
             </div>
             <div className="flex justify-start mt-5">
               <Button type="submit" variant="contained" color="primary">
-                Add Course
+                {t("Add Course")}
               </Button>
             </div>
           </Grid>
@@ -153,58 +160,58 @@ const AddNewCoursePage = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Course Title"
+                  label={t("Course Title")}
                   variant="outlined"
                   value={title}
                   onChange={handleTitleChange}
                   required
                   InputProps={{
-                    style: { backgroundColor: "var(--input-area-bg-color)" }, 
+                    style: { backgroundColor: "var(--input-area-bg-color)" },
                   }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Course Description"
+                  label={t("Course Description")}
                   variant="outlined"
                   value={description}
                   onChange={handleDescriptionChange}
                   required
                   InputProps={{
-                    style: { backgroundColor: "var(--input-area-bg-color)" }, 
+                    style: { backgroundColor: "var(--input-area-bg-color)" },
                   }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth variant="outlined">
-                  <InputLabel id="skill-label">Minimum Skill</InputLabel>
+                  <InputLabel id="skill-label">{t("Minimum Skill")}</InputLabel>
                   <Select
                     labelId="skill-label"
                     value={skill}
                     onChange={handleSkillChange}
-                    label="Minimum Skill"
+                    label={t("Minimum Skill")}
                     required
                     input={
                       <OutlinedInput
-                        label="Minimum Skill"
-                        style={{ backgroundColor: "var(--input-area-bg-color)" }} 
+                        label={t("Minimum Skill")}
+                        style={{ backgroundColor: "var(--input-area-bg-color)" }}
                       />
                     }
                     MenuProps={{
                       PaperProps: {
                         style: {
-                          backgroundColor: "var(--input-area-bg-color)", 
+                          backgroundColor: "var(--input-area-bg-color)",
                         },
                       },
                     }}
                   >
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>{t("None")}</em>
                     </MenuItem>
-                    <MenuItem value="beginner">Beginner</MenuItem>
-                    <MenuItem value="intermediate">Intermediate</MenuItem>
-                    <MenuItem value="advanced">Advanced</MenuItem>
+                    <MenuItem value="beginner">{t("Beginner")}</MenuItem>
+                    <MenuItem value="intermediate">{t("Intermediate")}</MenuItem>
+                    <MenuItem value="advanced">{t("Advanced")}</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -222,8 +229,12 @@ const AddNewCoursePage = () => {
                           <Grid item xs={2}>
                             <img
                               src={getMediaUrl(question)}
-                              alt="Media"
-                              style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                              alt={t("Media")}
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                objectFit: "cover",
+                              }}
                             />
                           </Grid>
                           <Grid item xs={8}>
@@ -251,7 +262,7 @@ const AddNewCoursePage = () => {
                         onClick={handleOpenDialog}
                         className="flex w-full h-full m-0 p-0 justify-center items-center"
                       >
-                        <span className="text-xl">+</span> Add Question
+                        <span className="text-xl">+</span> {t("Add Question")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -263,7 +274,7 @@ const AddNewCoursePage = () => {
       </form>
 
       <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Select a Question</DialogTitle>
+        <DialogTitle>{t("Select a Question")}</DialogTitle>
         <DialogContent>
           <List>
             {allQuestions.map((question, index) => (
@@ -276,8 +287,12 @@ const AddNewCoursePage = () => {
                   <Grid item xs={2}>
                     <img
                       src={getMediaUrl(question)}
-                      alt="Media"
-                      style={{ width: "50px", height: "50px", objectFit: "cover" }}
+                      alt={t("Media")}
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        objectFit: "cover",
+                      }}
                     />
                   </Grid>
                   <Grid item xs={10}>
@@ -290,10 +305,24 @@ const AddNewCoursePage = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
-            Cancel
+            {t("Cancel")}
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarMessage.includes(t("successfully")) ? "success" : "error"}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

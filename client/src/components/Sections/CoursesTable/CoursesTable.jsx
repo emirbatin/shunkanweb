@@ -9,7 +9,6 @@ import {
   Paper,
   Typography,
   TextField,
-  Button,
   IconButton,
   Tooltip,
 } from "@mui/material";
@@ -37,7 +36,7 @@ const CoursesTable = ({ courses }) => {
 
   const handleClick = () => {
     navigate("/add-new-course");
-    console.log("Add new question clicked");
+    console.log(t("Add new course clicked"));
   };
 
   return (
@@ -46,15 +45,15 @@ const CoursesTable = ({ courses }) => {
         <Typography variant="h6" className="text-2xl font-bold mb-4 text-left">
           {t("courses")}
         </Typography>
-        <Tooltip title={"Add new course"}>
-          <IconButton color="primary" href="" onClick={handleClick}>
+        <Tooltip title={t("Add new course")}>
+          <IconButton color="primary" onClick={handleClick}>
             <AddIcon />
           </IconButton>
         </Tooltip>
       </div>
       <br />
       <TextField
-        label="Search by Name"
+        label={t("Search by Name")}
         variant="outlined"
         fullWidth
         value={searchTerm}
@@ -69,7 +68,7 @@ const CoursesTable = ({ courses }) => {
               <TableCell>{t("thumbnail")}</TableCell>
               <TableCell>{t("id")}</TableCell>
               <TableCell>{t("title")}</TableCell>
-              <TableCell>{t("minimumskill")}</TableCell>
+              <TableCell>{t("minimum skill")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -87,7 +86,6 @@ const CoursesTable = ({ courses }) => {
                 <TableCell>{course._id}</TableCell>
                 <TableCell>{course.title}</TableCell>
                 <TableCell>{t(course.minimumSkill)}</TableCell>
-                <TableCell></TableCell>
               </TableRow>
             ))}
           </TableBody>

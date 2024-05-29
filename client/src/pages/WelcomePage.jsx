@@ -50,8 +50,7 @@ const WelcomePage = () => {
             {t("appTitle")}
           </Typography>
           <Typography sx={{ mt: 2, mb: 2, color: "var(--text-secondary-color)" }} variant="h6">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
+            {t("welcomeText")}
           </Typography>
 
           <Button
@@ -60,7 +59,7 @@ const WelcomePage = () => {
             type="button"
             onClick={() => handleNavigate("/createAccount")} // Butona tıklandığında yönlendirme yap
           >
-            Let's Start
+            {t("startButton")}
           </Button>
           <div className="buttonContainer">
             {/*Login Text */}
@@ -73,7 +72,7 @@ const WelcomePage = () => {
               }}
               onClick={() => navigate("/login")} // onClick ile yönlendirme fonksiyonunu çağırır
             >
-              You're not new? then log in!
+              {t("loginText")}
             </Typography>
           </div>
         </div>

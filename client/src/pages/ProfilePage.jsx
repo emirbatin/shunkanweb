@@ -11,8 +11,10 @@ import { capitalizeFirstLetter } from "../utils/stringUtils";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { fetchUserDetails, updateUserDetails } from "../api"; // API çağrılarını içe aktarın
+import { useTranslation } from "react-i18next";
 
 const ProfilePage = () => {
+  const { t } = useTranslation();
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ const ProfilePage = () => {
       setUserTotalPoint(userData.totalPoint || 0);
       setUserRank(userData.rank || "Bronze");
     } catch (error) {
-      console.error("Kullanıcı bilgileri alınamadı:", error);
+      console.error(t("Kullanıcı bilgileri alınamadı"), error);
       navigate("/login");
     }
   };
@@ -77,7 +79,7 @@ const ProfilePage = () => {
         setUserBannerPicture(updatedUser.bannerUrl);
         getUserDetails(userId);
       } catch (error) {
-        console.error("Error updating user:", error);
+        console.error(t("Error updating user"), error);
       }
     }
     setEditMode(!editMode);
@@ -103,7 +105,7 @@ const ProfilePage = () => {
     setUserBannerPicture(url);
   };
 
-  if (!username) return <div>Loading...</div>;
+  if (!username) return <div>{t("Loading...")}</div>;
 
   return (
     <div className="flex w-auto h-full justify-start items-start flex-row">
@@ -161,7 +163,7 @@ const ProfilePage = () => {
                 color="primary"
                 onClick={handleEditClick}
               >
-                {editMode ? "Save" : "Edit"}
+                {editMode ? t("Save") : t("Edit")}
               </Button>
             </div>
           </div>
@@ -190,7 +192,7 @@ const ProfilePage = () => {
         <div className="flex flex-col">
           <br />
           <div className="flex items-start justify-start text-left">
-            <Typography variant="h5">User Statistics</Typography>
+            <Typography variant="h5">{t("User Statistics")}</Typography>
           </div>
           <br />
 
@@ -199,13 +201,13 @@ const ProfilePage = () => {
               <StatisticCards
                 CardImageSrc={FlameImage}
                 CardIconBGColor="bg-red-200"
-                CardTitle="Daily Series"
+                CardTitle={t("Daily Series")}
                 UserStatisticData={userDailySeries}
               />
             </div>
             <div className="col-span-1 row-span-1">
               <StatisticCards
-                CardTitle="Total Point"
+                CardTitle={t("Total Point")}
                 CardIconBGColor="bg-orange-300"
                 UserStatisticData={userTotalPoint}
               />
@@ -213,7 +215,7 @@ const ProfilePage = () => {
             <div className="col-span-1 row-span-1">
               <StatisticCards
                 CardImageSrc={BadgeImage}
-                CardTitle="Rank"
+                CardTitle={t("Rank")}
                 CardIconBGColor="bg-purple-200"
                 UserStatisticData={userRank}
               />

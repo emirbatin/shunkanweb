@@ -69,7 +69,7 @@ const CreateAccountPage = () => {
     }
   };
 
-  // İsteğe bağlı olarak, son section için geriye gitme işlevi ekleyebilirsiniz.
+  // İsteğe bağlı olarak, son section için geriye gitme işlevi
   const goToPreviousSection = () => {
     if (currentSection > 0) {
       setCurrentSection(currentSection - 1);
@@ -114,7 +114,7 @@ const CreateAccountPage = () => {
           <SectionChoosePlan
             onPlanSelect={handlePlanSelect}
             goToNextSection={goToNextSection}
-            userInfo={userInfo} // Bu satırı ekleyin
+            userInfo={userInfo} 
           />
         );
       default:

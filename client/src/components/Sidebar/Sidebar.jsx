@@ -40,13 +40,13 @@ const Sidebar = ({ isOpen }) => {
       const res = await fetch(`/api/users/${userId}`);
       const userData = await res.json();
       if (!res.ok) {
-        throw new Error(userData.error || "Bir hata oluştu");
+        throw new Error(userData.error || t("An error occurred"));
       }
       setUsername(userData.username);
       setSidebarProfilePicture(userData.imageUrl);
       setUserPerm(userData.role);
     } catch (error) {
-      console.error("Kullanıcı bilgileri alınamadı:", error);
+      console.error(t("Failed to fetch user details:"), error);
       navigate("/login");
     }
   };

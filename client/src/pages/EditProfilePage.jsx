@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode"; // Doğru kullanım bu şekildedir
 import { capitalizeFirstLetter } from "../utils/stringUtils";
 import { fetchUserDetails, updateUserDetails } from "../api"; // API çağrılarını içe aktarın
+import { useTranslation } from "react-i18next";
 
 const EditProfilePage = () => {
+  const { t } = useTranslation();
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -31,7 +33,7 @@ const EditProfilePage = () => {
       setUserProfilePicture(userData.imageUrl);
       setUserPerm(userData.role);
     } catch (error) {
-      console.error("Kullanıcı bilgileri alınamadı:", error);
+      console.error(t("Error fetching user details:"), error);
       navigate("/login");
     }
   };
@@ -43,7 +45,7 @@ const EditProfilePage = () => {
       const result = await updateUserDetails(userId, data);
       console.log(result);
     } catch (error) {
-      console.error("Kullanıcı bilgileri güncellenemedi:", error);
+      console.error(t("Error updating user details:"), error);
     }
   };
 
@@ -51,7 +53,7 @@ const EditProfilePage = () => {
     getUserDetails(userId);
   }, [userId]);
 
-  if (!username) return <div>Loading...</div>;
+  if (!username) return <div>{t("Loading...")}</div>;
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -65,7 +67,7 @@ const EditProfilePage = () => {
       />
       <form onSubmit={handleEditProfile}>
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username">{t("Username")}:</label>
           <input
             type="text"
             id="username"
@@ -75,7 +77,7 @@ const EditProfilePage = () => {
           />
         </div>
         <div>
-          <label htmlFor="profilePicture">Profile Picture:</label>
+          <label htmlFor="profilePicture">{t("Profile Picture")}:</label>
           <input
             type="file"
             id="profilePicture"
@@ -83,7 +85,7 @@ const EditProfilePage = () => {
             onChange={(e) => setUserProfilePicture(URL.createObjectURL(e.target.files[0]))}
           />
         </div>
-        <button type="submit">Save</button>
+        <button type="submit">{t("Save")}</button>
       </form>
     </div>
   );

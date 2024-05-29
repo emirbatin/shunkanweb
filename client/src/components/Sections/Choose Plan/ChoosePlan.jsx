@@ -45,13 +45,13 @@ const Section5 = ({ onPlanSelect, goToNextSection, userInfo }) => {
         const json = await response.json();
 
         if (!response.ok) {
-          throw new Error(json.error || "Unknown Error");
+          throw new Error(json.error || t("Unknown Error"));
         }
 
-        console.log("Registration successful. User data:", json);
+        console.log(t("Registration successful. User data:"), json);
         navigate("/login");
       } catch (error) {
-        console.error("Registration failed:", error);
+        console.error(t("Registration failed:"), error);
         // Burada kullanıcıya hata mesajını göstermek için bir mekanizma ekleyebilirsiniz.
       }
     }
@@ -64,7 +64,7 @@ const Section5 = ({ onPlanSelect, goToNextSection, userInfo }) => {
   return (
     // Plan seçim ekranı
     <div className="flex flex-col justify-center items-center text-center w-auto h-screen pb-40">
-      <h1>Almost done! Now choose your plan</h1>
+      <h1>{t("Almost done! Now choose your plan")}</h1>
       <br />
       <div className="flex flex-col justify-center items-center text-center w-auto h-auto">
         <div className="flex flex-row justify-center items-center text-center w-auto h-auto">
@@ -165,15 +165,15 @@ const Section5 = ({ onPlanSelect, goToNextSection, userInfo }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"No Plan Selected"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{t("No Plan Selected")}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Please select a plan to proceed.
+            {t("Please select a plan to proceed.")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" autoFocus>
-            Okay
+            {t("Okay")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -38,7 +38,7 @@ const QuestionsTable = ({ questions }) => {
 
   const handleClick = () => {
     navigate("/add-new-question");
-    console.log("Add new question clicked");
+    console.log(t("Add new question clicked"));
   };
 
   return (
@@ -47,7 +47,7 @@ const QuestionsTable = ({ questions }) => {
         <Typography variant="h6" className="text-2xl font-bold mb-4 text-left">
           {t("questions")}
         </Typography>
-        <Tooltip title={"Add new question"}>
+        <Tooltip title={t("Add new question")}>
           <IconButton color="primary" onClick={handleClick}>
             <AddIcon />
           </IconButton>
@@ -55,7 +55,7 @@ const QuestionsTable = ({ questions }) => {
       </div>
       <br />
       <TextField
-        label="Search by Title"
+        label={t("Search by Title")}
         variant="outlined"
         fullWidth
         value={searchTerm}
@@ -90,7 +90,6 @@ const QuestionsTable = ({ questions }) => {
                 <TableCell>{t(question.questionText)}</TableCell>
                 <TableCell>{question.points}</TableCell>
                 <TableCell>{question.correctAnswer}</TableCell>
-                <TableCell></TableCell>
               </TableRow>
             ))}
           </TableBody>

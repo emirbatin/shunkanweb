@@ -8,8 +8,10 @@ import {
 } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import { capitalizeFirstLetter } from "../../utils/stringUtils";
+import { useTranslation } from "react-i18next";
 
 const CourseDetails = ({ course }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const handleNavigate = (path) => {
     navigate(path);
@@ -33,13 +35,13 @@ const CourseDetails = ({ course }) => {
         {/* Course Details */}
         <div className="flex flex-col p-2">
           <Typography variant="h6" className="card-title">
-            {formattedTitle}
+            {t(formattedTitle)}
           </Typography>
           <Typography variant="subtitle1" className="card-description">
-            {formattedDescription}
+            {t(formattedDescription)}
           </Typography>
           <Typography variant="subtitle1" className="card-minimum-skill">
-            Level: {formattedLevel}
+          {t("Level:")} {t(formattedLevel)}
           </Typography>
         </div>
         {/* Course Button */}
@@ -51,7 +53,7 @@ const CourseDetails = ({ course }) => {
             onClick={() => handleNavigate(`/course/${course._id}`)}
           >
             <Typography variant="subtitle1" className="course-button-text">
-              Start
+            {t("Start")}
             </Typography>
           </Button>
         </div>

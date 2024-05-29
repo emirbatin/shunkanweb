@@ -10,10 +10,14 @@ import {
   InputLabel,
   Grid,
   OutlinedInput,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { createQuestion } from "../api";
+import { useTranslation } from "react-i18next";
 
 const AddNewQuestionPage = () => {
+  const { t } = useTranslation();
   const [questionData, setQuestionData] = useState({
     questionText: "",
     options: [{ label: "", description: "" }],
@@ -23,6 +27,8 @@ const AddNewQuestionPage = () => {
     mediaType: "none",
     media: null,
   });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleAddOption = () => {
     setQuestionData({
@@ -61,16 +67,24 @@ const AddNewQuestionPage = () => {
 
     try {
       const response = await createQuestion(formData);
-      console.log("Question created successfully:", response);
+      console.log(t("Question created successfully:"), response);
+      setSnackbarMessage(t("Question created successfully!"));
+      setSnackbarOpen(true);
     } catch (error) {
-      console.error("Question creation failed:", error);
+      console.error(t("Question creation failed:"), error);
+      setSnackbarMessage(t("Question creation failed!"));
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
     <Container maxWidth="md">
       <Typography variant="h5" component="h1" gutterBottom>
-        Add New Question
+        {t("Add New Question")}
       </Typography>
       <div
         style={{
@@ -85,7 +99,7 @@ const AddNewQuestionPage = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Question Text"
+                label={t("Question Text")}
                 variant="outlined"
                 name="questionText"
                 value={questionData.questionText}
@@ -113,7 +127,7 @@ const AddNewQuestionPage = () => {
                     <Grid item xs={6}>
                       <TextField
                         fullWidth
-                        label={`Option ${index + 1} Label`}
+                        label={`${t("Option")} ${index + 1} ${t("Label")}`}
                         variant="outlined"
                         name="label"
                         value={option.label}
@@ -130,7 +144,9 @@ const AddNewQuestionPage = () => {
                     <Grid item xs={6}>
                       <TextField
                         fullWidth
-                        label={`Option ${index + 1} Description`}
+                        label={`${t("Option")} ${index + 1} ${t(
+                          "Description"
+                        )}`}
                         variant="outlined"
                         name="description"
                         value={option.description}
@@ -147,14 +163,14 @@ const AddNewQuestionPage = () => {
                   </Grid>
                 ))}
                 <Button onClick={handleAddOption} style={{ marginTop: "10px" }}>
-                  Add Option
+                  {t("Add Option")}
                 </Button>
               </div>
             </Grid>
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Correct Answer"
+                label={t("Correct Answer")}
                 variant="outlined"
                 name="correctAnswer"
                 value={questionData.correctAnswer}
@@ -171,7 +187,7 @@ const AddNewQuestionPage = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Points"
+                label={t("Points")}
                 type="number"
                 variant="outlined"
                 name="points"
@@ -188,7 +204,7 @@ const AddNewQuestionPage = () => {
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel id="difficulty-label">Difficulty</InputLabel>
+                <InputLabel id="difficulty-label">{t("Difficulty")}</InputLabel>
                 <Select
                   labelId="difficulty-label"
                   name="difficulty"
@@ -196,7 +212,7 @@ const AddNewQuestionPage = () => {
                   onChange={handleInputChange}
                   input={
                     <OutlinedInput
-                      label="Difficulty"
+                      label={t("Difficulty")}
                       style={{
                         backgroundColor: "var(--input-area-bg-color)",
                         color: "var(--text-color)",
@@ -212,15 +228,15 @@ const AddNewQuestionPage = () => {
                     },
                   }}
                 >
-                  <MenuItem value="easy">Easy</MenuItem>
-                  <MenuItem value="medium">Medium</MenuItem>
-                  <MenuItem value="hard">Hard</MenuItem>
+                  <MenuItem value="easy">{t("Easy")}</MenuItem>
+                  <MenuItem value="medium">{t("Medium")}</MenuItem>
+                  <MenuItem value="hard">{t("Hard")}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel id="mediaType-label">Media Type</InputLabel>
+                <InputLabel id="mediaType-label">{t("Media Type")}</InputLabel>
                 <Select
                   labelId="mediaType-label"
                   name="mediaType"
@@ -228,7 +244,7 @@ const AddNewQuestionPage = () => {
                   onChange={handleInputChange}
                   input={
                     <OutlinedInput
-                      label="Media Type"
+                      label={t("Media Type")}
                       style={{
                         backgroundColor: "var(--input-area-bg-color)",
                         color: "var(--text-color)",
@@ -245,9 +261,9 @@ const AddNewQuestionPage = () => {
                     },
                   }}
                 >
-                  <MenuItem value="none">None</MenuItem>
-                  <MenuItem value="image">Image</MenuItem>
-                  <MenuItem value="video">Video</MenuItem>
+                  <MenuItem value="none">{t("None")}</MenuItem>
+                  <MenuItem value="image">{t("Image")}</MenuItem>
+                  <MenuItem value="video">{t("Video")}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -263,12 +279,28 @@ const AddNewQuestionPage = () => {
             )}
             <Grid item xs={12}>
               <Button type="submit" variant="contained" color="primary">
-                Add Question
+                {t("Add Question")}
               </Button>
             </Grid>
           </Grid>
         </form>
       </div>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={
+            snackbarMessage.includes(t("successfully")) ? "success" : "error"
+          }
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

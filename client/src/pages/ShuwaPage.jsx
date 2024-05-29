@@ -43,7 +43,7 @@ const ShuwaPage = () => {
       // Zamanlayıcı bittiğinde işareti kontrol etme
       timeout = setTimeout(() => {
         if (!correctSignDetected) {
-          setFeedback("Yanlış cevap");
+          setFeedback(t("wronganswer"));
         }
         setIsConnected(false); // Disconnect client when time is up
         setIsLevelCompleted(true); // Mark level as completed
@@ -52,14 +52,14 @@ const ShuwaPage = () => {
       connectSocket();
 
       onSocketConnect(() => {
-        console.log("Connected to server");
+        console.log(t("Connected to server"));
       });
 
       onSentenceUpdate((data) => {
         setSentence(data.sentence);
         if (data.sentence === targetWord) {
           setCorrectSignDetected(true);
-          setFeedback("Doğru cevap!");
+          setFeedback(t("correctanswer"));
           setIsConnected(false); // Correct sign detected, disconnect client
           setIsLevelCompleted(true); // Mark level as completed
         } else {
@@ -68,7 +68,7 @@ const ShuwaPage = () => {
       });
 
       onSocketDisconnect(() => {
-        console.log("Disconnected from server");
+        console.log(t("Disconnected from server"));
       });
     } else {
       disconnectSocket();
@@ -86,14 +86,14 @@ const ShuwaPage = () => {
       offSocketDisconnect();
       disconnectSocket(); // Ensure the socket disconnects when the component unmounts
     };
-  }, [isConnected, targetWord]);
+  }, [isConnected, targetWord, t, correctSignDetected]);
 
   useEffect(() => {
     if (timeLeft === 0 && !correctSignDetected) {
-      setFeedback("Yanlış cevap");
+      setFeedback(t("wronganswer"));
       setIsLevelCompleted(true); // Mark level as completed
     }
-  }, [timeLeft, correctSignDetected]);
+  }, [timeLeft, correctSignDetected, t]);
 
   const handleButtonClick = () => {
     if (isLevelCompleted) {
@@ -125,10 +125,10 @@ const ShuwaPage = () => {
           />
         </div>
         <div className="flex flex-col flex-grow justify-start items-start text-start">
-          <Typography variant="h5">Hedef: {t(targetWord)}</Typography>
+          <Typography variant="h5">{t("Target")}: {t(targetWord)}</Typography>
           <br />
           <div id="sentence">{sentence}</div>
-          <div id="timer">Kalan Süre: {timeLeft} saniye</div>
+          <div id="timer">{t("Time Left")}: {timeLeft} {t("seconds")}</div>
           {feedback && <div id="feedback">{feedback}</div>}
           <br />
         </div>
@@ -144,7 +144,7 @@ const ShuwaPage = () => {
               variant="contained"
               onClick={handleButtonClick}
             >
-              {isLevelCompleted ? "Next" : isConnected ? "Bitir" : "Başla"}
+              {isLevelCompleted ? t("Next") : isConnected ? t("Finish") : t("Start")}
             </Button>
           </div>
         </div>
