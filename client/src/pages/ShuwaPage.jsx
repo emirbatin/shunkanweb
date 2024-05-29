@@ -115,7 +115,7 @@ const ShuwaPage = () => {
   return (
     <div className="flex flex-col md:flex-row h-full">
       <Sidebar />
-      <div className="flex flex-row w-full items-center justify-center mr-72">
+      <div className="flex flex-row w-full items-center justify-center pr-72">
         <div className="flex flex-grow justify-end mr-20">
           <img
             className="flex w-80 h-80 object-cover"
