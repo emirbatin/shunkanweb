@@ -26,8 +26,6 @@ app.use('/api/stats', statsRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    // Listen for requests
-
     app.listen(process.env.PORT, () => {
       console.log(`Server is running on port ${process.env.PORT}`);
     });

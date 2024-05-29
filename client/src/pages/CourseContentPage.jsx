@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Typography, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { jwtDecode } from "jwt-decode"; // Doğru kullanım bu şekildedir
+import {jwtDecode} from "jwt-decode"; // Correct usage
 import LottieAnimation from "../components/LootieAnimation/lootieAnimation.jsx";
 import LoadingLootie from "../assets/lottie/Manwithglassessittingonmonitorandlookingup.json";
 import {
@@ -11,7 +11,7 @@ import {
   fetchQuestionDetails,
   saveWrongAnswers,
   addCoursePoints
-} from "../api"; // API fonksiyonlarını içe aktarın
+} from "../api"; // Import API functions
 
 const CourseContentPage = () => {
   const { t } = useTranslation();
@@ -29,7 +29,7 @@ const CourseContentPage = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
-  const [finishTriggered, setFinishTriggered] = useState(false); // Yeni state
+  const [finishTriggered, setFinishTriggered] = useState(false); // New state
 
   const userToken = sessionStorage.getItem("token") || localStorage.getItem("token");
 
@@ -116,18 +116,37 @@ const CourseContentPage = () => {
       setTotalPoints((prevPoints) => prevPoints + question.points); // Increment total points
 
       if (isLastQuestion) {
-        setFinishTriggered(true); // Finish işlemi tetiklendi
+        setFinishTriggered(true); // Finish triggered
       } else {
         handleNextQuestion();
       }
     }
   }, [selectedOption, question, isLastQuestion]);
 
+  const handleFinish = useCallback(async () => {
+    if (userToken) {
+      const data = jwtDecode(userToken);
+      const userId = data.id;
+      try {
+        // Save wrong answers
+        await saveWrongAnswers(userId, wrongAnswers);
+        console.log(t("Answers saved successfully"));
+
+        // Update user points
+        await addCoursePoints(userId, totalPoints);
+        console.log(t("Points added successfully"));
+      } catch (error) {
+        console.error(t("Error saving answers or adding points:"), error);
+      }
+    }
+    navigate("/courses");
+  }, [navigate, userToken, wrongAnswers, totalPoints, t]);
+
   useEffect(() => {
     if (finishTriggered) {
       handleFinish();
     }
-  }, [finishTriggered, totalPoints, handleFinish]); // finishTriggered veya totalPoints değiştiğinde handleFinish fonksiyonunu çağır
+  }, [finishTriggered, totalPoints, handleFinish]); // Call handleFinish when finishTriggered or totalPoints changes
 
   const handleNextQuestion = useCallback(() => {
     if (!isLastQuestion) {
@@ -150,28 +169,9 @@ const CourseContentPage = () => {
     if (!isLastQuestion) {
       handleNextQuestion();
     } else {
-      setFinishTriggered(true); // Finish işlemi tetiklendi
+      setFinishTriggered(true); // Finish triggered
     }
   }, [question, isLastQuestion, handleNextQuestion]);
-
-  const handleFinish = useCallback(async () => {
-    if (userToken) {
-      const data = jwtDecode(userToken);
-      const userId = data.id;
-      try {
-        // Yanlış cevapları kaydet
-        await saveWrongAnswers(userId, wrongAnswers);
-        console.log(t("Answers saved successfully"));
-
-        // Kullanıcı puanlarını güncelle
-        await addCoursePoints(userId, totalPoints);
-        console.log(t("Points added successfully"));
-      } catch (error) {
-        console.error(t("Error saving answers or adding points:"), error);
-      }
-    }
-    navigate("/courses");
-  }, [navigate, userToken, wrongAnswers, totalPoints, t]);
 
   const renderContent = (index) => {
     let mediaUrl = index === 0 ? question?.mediaUrl : tabContents[index];
@@ -265,8 +265,7 @@ const CourseContentPage = () => {
         </div>
       </div>
 
-      {/* Yanlış Cevap Verilerini Ekrana Yazdırılması */}
-
+      {/* Display wrong answers (if necessary) */}
       {/* 
       <Typography variant="h6">{t("Wrong Answers")}:</Typography>
       {wrongAnswers.map((wrongAnswer, index) => (
