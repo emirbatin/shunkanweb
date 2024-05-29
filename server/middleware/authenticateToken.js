@@ -22,4 +22,4 @@ async function authenticateToken(req, res, next) {
   }
 }
 
-module.exports = authenticateToken; // Middleware'i dışa aktar
+module.exports = authenticateToken; 
