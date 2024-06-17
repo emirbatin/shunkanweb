@@ -8,5 +8,12 @@
     ],
     "routes": [
       { "src": "/(.*)", "dest": "/" }
-    ]
+    ],
+    "build": {
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "command": "npm install && npm run build"
+    }
   }
+  
