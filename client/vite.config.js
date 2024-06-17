@@ -1,10 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// https://vitejs.dev/config/
 export default defineConfig({
   server: {
     port: 3000,
@@ -20,8 +19,7 @@ export default defineConfig({
   define: {
     'process.env': {
       REACT_APP_API_URL: process.env.REACT_APP_API_URL,
-      REACT_APP_FLASK_URL: process.env.REACT_APP_FLASK_URL
-    }
-  }
-})
-
+      REACT_APP_FLASK_URL: process.env.REACT_APP_FLASK_URL,
+    },
+  },
+});
