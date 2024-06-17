@@ -36,3 +36,5 @@ mongoose
   });
 
 process.env;
+
+module.exports = app;
