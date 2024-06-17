@@ -11,6 +11,12 @@ const app = express();
 
 app.use(express.json());
 
+app.get("/log-ip", (req, res) => {
+  const ipAddress = req.ip;
+  console.log(`IP Address: ${ipAddress}`);
+  res.send(`IP Address logged: ${ipAddress}`);
+});
+
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
