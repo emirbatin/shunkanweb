@@ -16,6 +16,11 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      external: ['socket.io-client']
+    }
+  },
   define: {
     'process.env': {
       REACT_APP_API_URL: process.env.REACT_APP_API_URL,
